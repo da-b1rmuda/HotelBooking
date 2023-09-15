@@ -38,10 +38,7 @@ class RoomService {
       where id_room = $5`,
       [id_room_type, room_floor, id_status, numberRoom, id_room],
     );
-    await client.query (
-      `delete from public.roomandfacility where id_room = $1`,
-      [id_room], 
-    )
+    await client.query(`delete from public.roomandfacility where id_room = $1`, [id_room]);
     await targetKeys.map((item) => {
       client.query(
         `insert into public.roomandfacility (id_facility, id_room) 
@@ -51,14 +48,8 @@ class RoomService {
     });
   }
   async deleteRoom(id_room) {
-    await client.query (
-      `delete from public.roomandfacility where id_room = $1`,
-      [id_room], 
-    )
-    await client.query(
-      `delete from public.room where id_room = $1`,
-      [id_room], 
-    );
+    await client.query(`delete from public.roomandfacility where id_room = $1`, [id_room]);
+    await client.query(`delete from public.room where id_room = $1`, [id_room]);
   }
 }
 
