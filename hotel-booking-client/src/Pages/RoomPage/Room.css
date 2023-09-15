@@ -1,0 +1,31 @@
+.mt-10 {
+  margin-top: 10px;
+}
+
+.d-f {
+  display: flex;
+}
+
+.jc-sb {
+  justify-content: space-between;
+}
+
+.button-left Button {
+  border-color: black;
+}
+
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.274);
+}
+
+.df-center-screen{
+  height: 100vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+}
