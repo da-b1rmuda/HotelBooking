@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Select, Spin, Transfer, message, InputNumber } from 'antd';
+import { Button, Card, Col, Row, Select, Transfer, message, InputNumber } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetMessagesAction, roomCreateAction } from '../../store/actions/roomAction';
+import {
+  resetMessagesAction,
+  roomCreateAction,
+  roomEditAction,
+  roomGetAction,
+} from '../../store/actions/roomAction';
 
 import './Room.css';
+import Loading from '../../components/Loading/Loading';
 
 const RoomCreate = (props) => {
   //Notification
@@ -16,41 +22,92 @@ const RoomCreate = (props) => {
   const [targetKeys, setTargetKeys] = useState([]);
 
   //Room fields
-  const [floorRoom, setFloorRoom] = useState();
-  const [statusRoom, setStatusRoom] = useState();
-  const [typeRoom, setTypeRoom] = useState();
-  const [numberRoom, setNumberRoom] = useState();
+  const [floorRoomf, setFloorRoomf] = useState();
+  const [statusRoomf, setStatusRoomf] = useState();
+  const [typeRoomf, setTypeRoomf] = useState();
+  const [numberRoomf, setNumberRoomf] = useState();
 
   //State
   const dispatch = useDispatch();
-  const { isLoading, error, success } = useSelector((state) => state.roomStore);
+  const { room, isLoading, error, success } = useSelector((state) => state.roomStore);
+  const { statusRoom, facilityRoom, typeRoom } = useSelector((state) => state.additionalsStore);
+  const statusData = () => {
+    let temp = [];
+    statusRoom.map((item) => {
+      temp.push({
+        value: item.id_status,
+        label: item.status,
+      });
+    });
+    return temp;
+  };
+  const facilityData = () => {
+    let temp = [];
+    facilityRoom.map((item) => {
+      temp.push({
+        key: item.facility,
+        title: item.facility,
+      });
+    });
+    return temp;
+  };
+  const typeData = () => {
+    let temp = [];
+    typeRoom.map((item) => {
+      temp.push({
+        value: item.id_room_type,
+        label: item.room_type,
+      });
+    });
+    return temp;
+  };
+
+  //
+  // Load data for editing
+  //
+  useEffect(() => {
+    if (props.onEditRoom === true) {
+      loadDataForEdit();
+    }
+    // eslint-disable-next-line
+  }, [props.onEditRoom]);
+
+  const loadDataForEdit = () => {
+    room.map((item) => {
+      if (item.id_room === props?.editRow) {
+        let id_room_type;
+        typeRoom.map((sub) => {
+          if (item.room_type === sub.room_type) {
+            id_room_type = sub.id_room_type;
+          }
+        });
+        let id_status;
+        statusRoom.map((sub) => {
+          if (item.status === sub.status) {
+            id_status = sub.id_status;
+          }
+        });
+        setFloorRoomf(item.room_floor);
+        setStatusRoomf(id_status);
+        setTypeRoomf(id_room_type);
+        setNumberRoomf(item.room_number);
+        setTargetKeys(item.facility);
+      }
+    });
+  };
 
   //
   // Transfer code
   //
   const getMock = () => {
-    const mockData = [
-      {
-        key: "0f0679ee-dc18-4191-994f-356142630cb7",
-        title: 'wi-fi',
-        description: 'description',
-      },
-      {
-        key: "aa837dfe-fa76-4051-9b8f-d6e6bc601ee7",
-        title: 'Холодильник',
-        description: 'description',
-      },
-      {
-        key: "f4767ec1-8558-4e42-8fe6-137d61ad3f27",
-        title: 'Ванна',
-        description: 'description',
-      },
-    ];
+    const mockData = facilityData();
     const initialTargetKeys = mockData
       .filter((item) => Number(item.key) > 10)
       .map((item) => item.key);
     setMockData(mockData);
-    setTargetKeys(initialTargetKeys);
+    if (props.onEditRoom === false) {
+      setTargetKeys(initialTargetKeys);
+    }
   };
 
   useEffect(() => {
@@ -61,57 +118,17 @@ const RoomCreate = (props) => {
 
   const handleChange = (newTargetKeys) => {
     setTargetKeys(newTargetKeys);
-    console.log(newTargetKeys)
   };
-
-  const handleSearch = (dir, value) => {
-    console.log('search:', dir, value);
-  };
-
-  //
-  // Loading
-  //
-  const LoadingPage = () => {
-    return (
-      <div className="loading-container">
-        <div className="d-f df-center-screen">
-          <Spin />
-        </div>
-      </div>
-    );
-  };
-
   //
   // Notification
   //
   useEffect(() => {
     if (!isEmpty(success)) {
-      successCreateRoom();
       dispatch(resetMessagesAction());
-      setFloorRoom();
-      setFloorRoom();
-      setStatusRoom();
+      dispatch(roomGetAction());
     }
-    if (!isEmpty(error)) {
-      errorCreateRoom(error);
-    }
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [error, success]);
-
-  const successCreateRoom = (success) => {
-    messageApi.open({
-      type: 'success',
-      content: 'Комната успешно создана',
-    });
-  };
-
-  const errorCreateRoom = (error) => {
-    console.log(error)
-    messageApi.open({
-      type: 'error',
-      content: error,
-    });
-  };
 
   const errorEmptyField = () => {
     messageApi.open({
@@ -130,17 +147,39 @@ const RoomCreate = (props) => {
     return false;
   };
   const onCreateRoom = () => {
-    if (isEmpty(typeRoom) || isEmpty(floorRoom) || isEmpty(statusRoom) || isEmpty(numberRoom)) {
-      errorEmptyField();
+    if (props.onEditRoom) {
+      dispatch(
+        roomEditAction(props.editRow, typeRoomf, floorRoomf, statusRoomf, numberRoomf, targetKeys),
+      );
+      return;
     } else {
-      dispatch(roomCreateAction(typeRoom, floorRoom, statusRoom, numberRoom, targetKeys));
+      if (
+        isEmpty(typeRoomf) ||
+        isEmpty(floorRoomf) ||
+        isEmpty(statusRoomf) ||
+        isEmpty(numberRoomf)
+      ) {
+        errorEmptyField();
+      } else {
+        dispatch(roomCreateAction(typeRoomf, floorRoomf, statusRoomf, numberRoomf, targetKeys));
+      }
     }
   };
 
+  //
+  // Back button
+  //
+  const onBackButton = () => {
+    //Закрыть окно редактирования\добавления
+    props.setOnCreateRoom(true);
+    //Изменяем статус редактирования
+    props.setOnEditRoom(false);
+  };
   return (
     <>
       {contextHolder}
-      <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => props.setOnCreateRoom(true)}>
+      {props.onEditRoom ? <h2>Редактирование комнаты</h2> : <h2>Создание комнаты</h2>}
+      <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => onBackButton()}>
         Назад
       </Button>
       <Row gutter={20}>
@@ -149,6 +188,9 @@ const RoomCreate = (props) => {
             <Select
               placeholder="Выберите этаж..."
               style={{ width: 160 }}
+              value={
+                props.onEditRoom ? floorRoomf + ' Этаж' : floorRoomf === '' ? null : floorRoomf
+              }
               options={[
                 { value: '1', label: '1 Этаж' },
                 { value: '2', label: '2 Этаж' },
@@ -156,7 +198,7 @@ const RoomCreate = (props) => {
                 { value: '4', label: '4 Этаж' },
                 { value: '5', label: '5 Этаж' },
               ]}
-              onChange={(e) => setFloorRoom(e)}
+              onChange={(e) => setFloorRoomf(e)}
             />
           </Card>
         </Col>
@@ -164,15 +206,10 @@ const RoomCreate = (props) => {
           <Card title="Статус комнаты" bordered={true}>
             <Select
               placeholder="Выберите статус..."
+              value={statusRoomf}
               style={{ width: 220 }}
-              options={[
-                { value: '024e26c7-5e33-4f35-a88e-e6f5c9322e02', label: 'Доступно' },
-                { value: '91128392-8f10-4cde-9684-0148536f9a1b', label: 'Забронировано' },
-                { value: '5e6c8c25-5492-447c-9c2b-eb1fe1a2a208', label: 'Заселено' },
-                { value: 'c6d79c91-1ffa-4cd2-a1d2-d352914e82e2', label: 'Ожидание' },
-                { value: 'b4cc08c0-0c4b-4d81-ad4e-475e816d08e6', label: 'Заблокировано' },
-              ]}
-              onChange={(e) => setStatusRoom(e)}
+              options={statusData()}
+              onChange={(e) => setStatusRoomf(e)}
             />
           </Card>
         </Col>
@@ -181,12 +218,9 @@ const RoomCreate = (props) => {
             <Select
               placeholder="Выберите тип..."
               style={{ width: 220 }}
-              options={[
-                { value: '34b88687-dac5-40ac-9bf5-27e83ae1d590', label: 'Односпальная комната' },
-                { value: '7d500222-3191-46f5-9978-e35e67624a14', label: 'Двуспальная комната' },
-                { value: '87defdd3-016b-450f-8155-bfd43d8a2edf', label: 'VIP комната' },
-              ]}
-              onChange={(e) => setTypeRoom(e)}
+              value={typeRoomf}
+              options={typeData()}
+              onChange={(e) => setTypeRoomf(e)}
             />
           </Card>
         </Col>
@@ -196,29 +230,28 @@ const RoomCreate = (props) => {
               min={100}
               max={999}
               placeholder="Введите номер комнаты..."
-              value={numberRoom}
-              onChange={(e) => setNumberRoom(e)}
+              value={numberRoomf}
+              onChange={(e) => setNumberRoomf(e)}
             />
           </Card>
         </Col>
-        <Col span={8}>
+        <Col span={10}>
           <Card title="Удобства" bordered={true}>
             <Transfer
               dataSource={mockData}
               filterOption={filterOption}
               targetKeys={targetKeys}
               onChange={handleChange}
-              onSearch={handleSearch}
               render={(item) => item.title}
             />
           </Card>
         </Col>
       </Row>
       <Button type="primary" onClick={() => onCreateRoom()}>
-        Создать
+        {props.onEditRoom ? 'Сохранить' : 'Создать'}
       </Button>
 
-      {isLoading && <LoadingPage />}
+      {isLoading && <Loading />}
     </>
   );
 };

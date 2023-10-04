@@ -14,11 +14,14 @@ additionalsRouter.post('/createFacility', additionalsController.CreateFacilityRo
 additionalsRouter.put('/editFacility', additionalsController.EditFacilityRoom);
 additionalsRouter.delete('/deleteFacility/:id', additionalsController.DeleteFacilityRoom);
 
-additionalsRouter.get('/getFacilityConnection', additionalsController.GetFacilityConnectionRoom);
-
 additionalsRouter.get('/getType', additionalsController.GetTypeRoom);
 additionalsRouter.post('/createType', additionalsController.CreateTypeRoom);
 additionalsRouter.put('/editType', additionalsController.EditTypeRoom);
 additionalsRouter.delete('/deleteType/:id', additionalsController.DeleteTypeRoom);
+
+additionalsRouter.get('/getStatusDeal', additionalsController.GetStatusDeal);
+additionalsRouter.post('/createStatusDeal', additionalsController.CreateStatusDeal);
+additionalsRouter.put('/editStatusDeal', additionalsController.EditStatusDeal);
+additionalsRouter.delete('/deleteStatusDeal/:id', additionalsController.DeleteStatusDeal);
 
 export default additionalsRouter;

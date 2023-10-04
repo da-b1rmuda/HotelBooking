@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
@@ -11,10 +11,17 @@ import {
   DollarOutlined,
   ControlOutlined,
   MenuUnfoldOutlined,
-  MenuFoldOutlined
+  MenuFoldOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme, Button } from 'antd';
 import { ContextBooking } from '../../context/booking.context';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getFacilityAction,
+  getStatusAction,
+  getTypeAction,
+  getStatusDealAction,
+} from '../../store/actions/additionalsAction';
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = () => {
@@ -33,7 +40,8 @@ const HomePage = () => {
       label,
     };
   }
-  const themeMenu = useContext(ContextBooking);
+  const { themeMenu } = useContext(ContextBooking);
+
   const items = [
     getItem('Обзор', '', <HomeOutlined />),
     getItem('Оформление', 'frontdesk', <EditOutlined />),
@@ -60,16 +68,23 @@ const HomePage = () => {
     setCollapsed(!collapsed);
   };
 
+  //
+  // Load data additional table
+  //
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getStatusAction());
+    dispatch(getFacilityAction());
+    dispatch(getTypeAction());
+    dispatch(getStatusDealAction());
+  }, []);
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        style={{ background: themeMenu.themeMenu === 'light' ? 'white' : '' }}
-
-        collapsed={collapsed}
-        >
+      <Sider style={{ background: themeMenu === 'light' ? 'white' : '' }} collapsed={collapsed}>
         <Menu
           onClick={onMenuItemClick}
-          theme={themeMenu.themeMenu}
+          theme={themeMenu}
           defaultSelectedKeys={['1']}
           mode="inline"
           items={items}
@@ -77,7 +92,10 @@ const HomePage = () => {
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16, marginLeft: 16 }}>
+          <Button
+            type="primary"
+            onClick={toggleCollapsed}
+            style={{ marginBottom: 16, marginLeft: 16 }}>
             {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           </Button>
         </Header>

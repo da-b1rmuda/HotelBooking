@@ -1,58 +1,58 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const roomSlice = createSlice({
-  name: 'roomStore',
+const dealSlice = createSlice({
+  name: 'dealStore',
   initialState: {
-    room: [],
+    deal: [],
     isLoading: false,
     error: '',
     success: '',
   },
   reducers: {
-    roomCreate(state) {
+    dealCreate(state) {
       state.isLoading = true;
     },
-    roomCreateSuccess(state, action) {
+    dealCreateSuccess(state, action) {
       state.isLoading = false;
       state.success = action.payload;
     },
-    roomCreateError(state, action) {
+    dealCreateError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    roomEdit(state) {
+    dealEdit(state) {
       state.isLoading = true;
     },
-    roomEditSuccess(state, action) {
+    dealEditSuccess(state, action) {
       state.isLoading = false;
       state.success = action.payload;
     },
-    roomEditError(state, action) {
+    dealEditError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    roomGet(state) {
+    dealGet(state) {
       state.isLoading = true;
     },
-    roomGetSuccess(state, action) {
+    dealGetSuccess(state, action) {
       state.isLoading = false;
-      state.room = action.payload.data;
+      state.deal = action.payload.data;
     },
-    roomGetError(state, action) {
+    dealGetError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
 
-    roomDelete(state) {
+    dealDelete(state) {
       state.isLoading = true;
     },
-    roomDeleteSuccess(state, action) {
+    dealDeleteSuccess(state, action) {
       state.isLoading = false;
       state.success = action.payload;
     },
-    roomDeleteError(state, action) {
+    dealDeleteError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -64,20 +64,20 @@ const roomSlice = createSlice({
   },
 });
 
-export default roomSlice.reducer;
+export default dealSlice.reducer;
 export const {
-  roomCreate,
-  roomCreateSuccess,
-  roomCreateError,
-  roomGet,
-  roomGetError,
-  roomGetSuccess,
-  roomDelete,
-  roomDeleteError,
-  roomDeleteSuccess,
-  roomEdit,
-  roomEditError,
-  roomEditSuccess,
+  dealCreate,
+  dealCreateError,
+  dealCreateSuccess,
+  dealDelete,
+  dealDeleteError,
+  dealDeleteSuccess,
+  dealEdit,
+  dealEditError,
+  dealEditSuccess,
+  dealGet,
+  dealGetError,
+  dealGetSuccess,
 
   resetMessages,
-} = roomSlice.actions;
+} = dealSlice.actions;

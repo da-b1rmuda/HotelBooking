@@ -83,18 +83,6 @@ class AdditionalsController {
   }
 
   //
-  // Facility сonnection 
-  //
-  async GetFacilityConnectionRoom(req, res, next) {
-    try {
-      const response = await additionalsService.getFacilityConnectionRoom();
-      return res.json(response.rows);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  //
   // Type room
   //
   async GetTypeRoom(req, res, next) {
@@ -128,6 +116,45 @@ class AdditionalsController {
       const { id } = req.params;
       await additionalsService.deleteTypeRoom(id);
       return res.json('Тип удален');
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  //
+  // Type room
+  //
+  async GetStatusDeal(req, res, next) {
+    try {
+      const response = await additionalsService.getStatusDeal();
+      return res.json(response.rows);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async CreateStatusDeal(req, res, next) {
+    try {
+      const { status_deal, color } = req.body;
+      await additionalsService.createStatusDeal(status_deal, color);
+      return res.json('Статус акции добавлен');
+    } catch (e) {
+      next(e);
+    }
+  }
+  async EditStatusDeal(req, res, next) {
+    try {
+      const { id_status_deal, status_deal, color } = req.body;
+      await additionalsService.editStatusDeal(id_status_deal, status_deal, color);
+      return res.json('Статус акции изменен');
+    } catch (e) {
+      next(e);
+    }
+  }
+  async DeleteStatusDeal(req, res, next) {
+    try {
+      const { id } = req.params;
+      await additionalsService.deleteStatusDeal(id);
+      return res.json('Статус акции удален');
     } catch (e) {
       next(e);
     }

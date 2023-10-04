@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import errorMiddleware from './middleware/error.middleware.js';
 import roomRouter from './routes/room.routes.js';
 import additionalsRouter from './routes/additionals.routes.js';
+import dealRouter from './routes/deal.routes.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -29,10 +30,11 @@ app.use(
 );
 app.use(bodyParser.json());
 
-app.use('/room', roomRouter)
-app.use('/additionals', additionalsRouter)
+app.use('/room', roomRouter);
+app.use('/additionals', additionalsRouter);
+app.use('/deal', dealRouter);
 
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
 const start = () => {
   try {

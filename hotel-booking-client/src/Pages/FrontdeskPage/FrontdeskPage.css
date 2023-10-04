@@ -1,0 +1,41 @@
+.headerFrontdesk {
+  display: flex;
+  justify-content: space-between;
+}
+
+.p-t-3 {
+  padding-top: 3vh;
+}
+
+.flex-center{
+  align-items: center;
+}
+
+.p-r-2 {
+  padding-right: 2vh;
+}
+
+.text-fontdesk p {
+  color: #383E49;
+  font-size: 2vh;
+}
+.text-fontdesk span {
+  color: #5d6679;
+}
+.counter-fontdesk span {
+  color: white;
+}
+.counter-fontdesk p {
+  font-size: 3vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+}
+.counter-fontdesk{
+  padding-left: 5vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-card-body {
+  padding-top: 10px !important;
+}

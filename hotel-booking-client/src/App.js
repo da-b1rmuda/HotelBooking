@@ -9,6 +9,9 @@ import RoomPage from './Pages/RoomPage/RoomPage';
 import DealPage from './Pages/DealPage/DealPage';
 import RatePage from './Pages/RatePage/RatePage';
 import AdvancedPage from './Pages/AdvancedPage/AdvancedPage';
+import { ConfigProvider } from 'antd';
+import locale from 'antd/locale/ru_RU';
+import 'dayjs/locale/ru';
 
 function App() {
   const [themeMenu, setThemeMenu] = useState('light');
@@ -47,9 +50,15 @@ function App() {
   ]);
   return (
     <>
-      <ContextBooking.Provider value={{ themeMenu, setThemeMenu }}>
-        <RouterProvider router={router} />
-      </ContextBooking.Provider>
+      <ConfigProvider locale={locale}>
+        <ContextBooking.Provider
+          value={{
+            themeMenu,
+            setThemeMenu,
+          }}>
+          <RouterProvider router={router} />
+        </ContextBooking.Provider>
+      </ConfigProvider>
     </>
   );
 }

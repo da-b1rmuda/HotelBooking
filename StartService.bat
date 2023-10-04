@@ -1,4 +1,4 @@
-cd ./hotel-booking
+cd ./hotel-booking-client
 start npm start
 
 cd ./../hotel-booking-server

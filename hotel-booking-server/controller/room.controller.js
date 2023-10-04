@@ -5,7 +5,7 @@ const roomService = new RoomService();
 
 class RoomController {
   async GetRoom(req, res, next) {
-    try {
+    try { 
       const response = await roomService.getRoom();
       return res.json(response.rows);
     } catch (e) {
