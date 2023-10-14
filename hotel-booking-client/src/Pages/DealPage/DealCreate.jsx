@@ -158,7 +158,6 @@ const DealCreate = (props) => {
       );
       return;
     } else {
-      console.log(dataField.dateEndf);
       if (
         isEmpty(dataField.numberDealf) ||
         isEmpty(dataField.nameDealf.target?.value) ||

@@ -16,4 +16,7 @@ export default class AdditionalsService {
   static async getStatusDeal() {
     return await $api.get('/additionals/getStatusDeal');
   }
+  static async getCancelPolicy() {
+    return await $api.get('/additionals/getCancelPolicy');
+  }
 }

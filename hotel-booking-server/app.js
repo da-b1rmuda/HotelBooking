@@ -3,11 +3,11 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-
 import errorMiddleware from './middleware/error.middleware.js';
 import roomRouter from './routes/room.routes.js';
 import additionalsRouter from './routes/additionals.routes.js';
 import dealRouter from './routes/deal.routes.js';
+import rateRouter from './routes/rate.routes.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 app.use('/room', roomRouter);
 app.use('/additionals', additionalsRouter);
 app.use('/deal', dealRouter);
+app.use('/rate', rateRouter);
 
 app.use(errorMiddleware);
 

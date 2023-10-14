@@ -12,6 +12,9 @@ import {
   statusDealGet,
   statusDealGetError,
   statusDealGetSuccess,
+  cancelPolicyGet,
+  cancelPolicyGetError,
+  cancelPolicyGetSuccess,
 } from '../reducers/additionalsReducer';
 
 export const getStatusAction = () => async (dispatch) => {
@@ -50,5 +53,16 @@ export const getStatusDealAction = () => async (dispatch) => {
     );
   } catch (e) {
     dispatch(statusDealGetError(e.response?.data.message));
+  }
+};
+export const getCancelPolicyAction = () => async (dispatch) => {
+  try {
+    dispatch(cancelPolicyGet());
+    let response = await AdditionalsService.getCancelPolicy();
+    dispatch(
+      cancelPolicyGetSuccess({ successLoad: 'Данные успешно загружены', data: response.data }),
+    );
+  } catch (e) {
+    dispatch(cancelPolicyGetError(e.response?.data.message));
   }
 };

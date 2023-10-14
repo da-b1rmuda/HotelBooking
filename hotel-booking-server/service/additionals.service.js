@@ -131,6 +131,40 @@ class AdditionalsService {
   async deleteStatusDeal(id_status_deal) {
     await client.query(`delete from public.dealstatus where id_status_deal = $1`, [id_status_deal]);
   }
+
+  //
+  // Cancellation policy
+  //
+  async getCancelPolicy() {
+    const response = await client.query(`select * from public.cancellationpolicy`);
+    return response;
+  }
+  async createCancelPolicy(cancellation_policy, description, color) {
+    let hasAlreadyField = await client.query(
+      `select cancellation_policy from public.cancellationpolicy where cancellation_policy = $1`,
+      [cancellation_policy],
+    );
+    if (hasAlreadyField.rows[0] !== null && hasAlreadyField.rows[0] !== undefined) {
+      throw ApiError.BadRequest('Такое поле уже существует');
+    }
+    await client.query(
+      `insert into public.cancellationpolicy (cancellation_policy, description) 
+        values ($1, $2)`,
+      [cancellation_policy, description],
+    );
+  }
+  async editCancelPolicy(id_cancellation_policy, cancellation_policy, description) {
+    await client.query(
+      `update public.cancellationpolicy set cancellation_policy = $1, description = $2 
+      where id_cancellation_policy = $3`,
+      [cancellation_policy, description, id_cancellation_policy],
+    );
+  }
+  async deleteCancelPolicy(id_cancellation_policy) {
+    await client.query(`delete from public.cancellationpolicy where id_cancellation_policy = $1`, [
+      id_cancellation_policy,
+    ]);
+  }
 }
 
 export default AdditionalsService;

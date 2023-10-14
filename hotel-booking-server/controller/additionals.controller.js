@@ -159,6 +159,49 @@ class AdditionalsController {
       next(e);
     }
   }
+
+  //
+  // Cancellation policy
+  //
+  async GetCancelPolicy(req, res, next) {
+    try {
+      const response = await additionalsService.getCancelPolicy();
+      return res.json(response.rows);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async CreateCancelPolicy(req, res, next) {
+    try {
+      const { cancellation_policy, description } = req.body;
+      await additionalsService.createCancelPolicy(cancellation_policy, description);
+      return res.json('Политика отмены добавлена');
+    } catch (e) {
+      next(e);
+    }
+  }
+  async EditCancelPolicy(req, res, next) {
+    try {
+      const { id_cancellation_policy, cancellation_policy, description } = req.body;
+      await additionalsService.editCancelPolicy(
+        id_cancellation_policy,
+        cancellation_policy,
+        description,
+      );
+      return res.json('Политика отмены изменена');
+    } catch (e) {
+      next(e);
+    }
+  }
+  async DeleteCancelPolicy(req, res, next) {
+    try {
+      const { id } = req.params;
+      await additionalsService.deleteCancelPolicy(id);
+      return res.json('Политика отмены удалена');
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default AdditionalsController;

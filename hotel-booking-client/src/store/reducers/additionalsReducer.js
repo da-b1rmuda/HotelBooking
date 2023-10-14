@@ -7,6 +7,7 @@ const roomSlice = createSlice({
     facilityRoom: [],
     typeRoom: [],
     statusDeal: [],
+    cancelPolicy: [],
     isLoading: false,
     error: '',
     success: '',
@@ -63,6 +64,19 @@ const roomSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    cancelPolicyGet(state) {
+      state.isLoading = true;
+    },
+    cancelPolicyGetSuccess(state, action) {
+      state.isLoading = false;
+      state.cancelPolicy = action.payload.data;
+      state.success = action.payload.successLoad;
+    },
+    cancelPolicyGetError(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -80,4 +94,7 @@ export const {
   statusDealGet,
   statusDealGetError,
   statusDealGetSuccess,
+  cancelPolicyGet,
+  cancelPolicyGetError,
+  cancelPolicyGetSuccess,
 } = roomSlice.actions;

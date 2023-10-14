@@ -53,15 +53,7 @@ class DealController {
         description,
         id_deal,
       } = req.body;
-      console.log(deal_number,
-        deal_name,
-        discount,
-        start_date,
-        end_date,
-        id_room_type,
-        id_status_deal,
-        reservation_left,
-        description,)
+
       await dealService.editDeal(
         deal_number,
         deal_name,

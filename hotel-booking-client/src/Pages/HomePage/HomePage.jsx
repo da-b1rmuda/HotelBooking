@@ -21,6 +21,7 @@ import {
   getStatusAction,
   getTypeAction,
   getStatusDealAction,
+  getCancelPolicyAction,
 } from '../../store/actions/additionalsAction';
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -77,6 +78,7 @@ const HomePage = () => {
     dispatch(getFacilityAction());
     dispatch(getTypeAction());
     dispatch(getStatusDealAction());
+    dispatch(getCancelPolicyAction());
   }, []);
 
   return (

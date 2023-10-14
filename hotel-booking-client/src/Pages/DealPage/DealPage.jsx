@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FilterOutlined, MoreOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { MoreOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Button, Radio, Table, Tag, Space, Dropdown, message, Modal, Input } from 'antd';
 import './DealPage.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,29 +45,19 @@ const DealPage = () => {
           key: item.id_deal,
           deal_name: item?.deal_name,
           deal_number: '#' + item?.deal_number,
-          deal_price: item?.deal_price,
           discount: item?.discount,
           description: item?.description,
           start_date: getConvertedDate(item?.start_date),
           end_date: getConvertedDate(item?.end_date),
           id_deal: item?.id_deal,
           room_type: item?.room_type,
+          id_room_type: item?.id_room_type,
           status_deal: item?.status_deal,
           reservation_left: item?.reservation_left,
         });
       });
       setData(tempData);
     }
-  };
-
-  //
-  const loadFilter = () => {
-    let tempFilter = [];
-    // eslint-disable-next-line
-    statusDeal.map((item) => {
-      tempFilter.push({ text: item.status_deal, value: item.status_deal });
-    });
-    return tempFilter;
   };
 
   //
@@ -166,7 +156,7 @@ const DealPage = () => {
       key: ' status_deal',
       filters: getListFilter(statusDeal, 'status_deal'),
       render: (_, { status_deal }) => (
-        <Tag color={getColorTag(status_deal, statusDeal)}>{status_deal}</Tag>
+        <Tag color={getColorTag(status_deal, 'status_deal', statusDeal)}>{status_deal}</Tag>
       ),
       filteredValue: filteredInfo.status,
       filterIcon: <svg width={1} height={1}></svg>,
@@ -190,8 +180,6 @@ const DealPage = () => {
       ),
     },
   ];
-
-  console.log(filteredInfo);
 
   //
   // Notification

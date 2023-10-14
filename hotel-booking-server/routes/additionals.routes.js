@@ -24,4 +24,9 @@ additionalsRouter.post('/createStatusDeal', additionalsController.CreateStatusDe
 additionalsRouter.put('/editStatusDeal', additionalsController.EditStatusDeal);
 additionalsRouter.delete('/deleteStatusDeal/:id', additionalsController.DeleteStatusDeal);
 
+additionalsRouter.get('/getCancelPolicy', additionalsController.GetCancelPolicy);
+additionalsRouter.post('/createCancelPolicy', additionalsController.CreateCancelPolicy);
+additionalsRouter.put('/editCancelPolicy', additionalsController.EditCancelPolicy);
+additionalsRouter.delete('/deleteCancelPolicy/:id', additionalsController.DeleteCancelPolicy);
+
 export default additionalsRouter;

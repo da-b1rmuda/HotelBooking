@@ -16,11 +16,11 @@ export const isEmpty = (value, checkZero = false) => {
 //
 // Get color for tag
 //
-export const getColorTag = (status, allStatus) => {
+export const getColorTag = (status, field, allStatus) => {
   let color;
   // eslint-disable-next-line
   allStatus.map((item) => {
-    if (item.status_deal === status) {
+    if (item[field] === status) {
       color = item.color;
     }
   });
@@ -52,4 +52,15 @@ export const getListFilter = (data, DataField) => {
   return tempFilter;
 };
 
-
+export const getEndingWords = (num) => {
+  if (num % 10 === 1 && num % 10 !== 11 && num !== 11) {
+    return 'комната';
+  } else if (
+    (num % 10 === 2 || num % 10 === 3 || num % 10 === 4) &&
+    (num % 100 < 10 || num % 100 >= 20)
+  ) {
+    return 'комнаты';
+  } else {
+    return 'комнат';
+  }
+};
