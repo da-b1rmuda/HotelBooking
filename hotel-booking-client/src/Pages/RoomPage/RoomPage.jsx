@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Button, Space, Table, Tag, message, Dropdown, Modal } from 'antd';
 import { MoreOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-
+import { isEmpty, getColorTag } from '../../services/functionService';
 import './Room.css';
 import RoomCreate from './RoomCreate';
 import Loading from '../../components/Loading/Loading';
@@ -101,16 +101,6 @@ const Room = () => {
   };
 
   //
-  // Field is empty check
-  //
-  const isEmpty = (value) => {
-    if (value === '' || value === null || value === undefined) {
-      return true;
-    }
-    return false;
-  };
-
-  //
   // Schema table
   //
   const [selectedRow, setSelectedRow] = useState();
@@ -163,7 +153,9 @@ const Room = () => {
       dataIndex: 'status',
       key: 'status',
       filters: loadFilter(),
-      render: (_, { status }) => <Tag color={getColorStatus(status)}>{status}</Tag>,
+      render: (_, { status }) => (
+        <Tag color={getColorTag(status, 'status', statusRoom)}>{status}</Tag>
+      ),
       filteredValue: filteredInfo.status || null,
       onFilter: (value, record) => record.status.includes(value),
       filterIcon: <svg width={1} height={1}></svg>,
@@ -186,16 +178,6 @@ const Room = () => {
       ),
     },
   ];
-  const getColorStatus = (status) => {
-    let color;
-    // eslint-disable-next-line
-    statusRoom.map((item) => {
-      if (item.status === status) {
-        color = item.color;
-      }
-    });
-    return color;
-  };
 
   //
   // Filters

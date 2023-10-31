@@ -44,7 +44,7 @@ const HomePage = () => {
   const { themeMenu } = useContext(ContextBooking);
 
   const items = [
-    getItem('Обзор', '', <HomeOutlined />),
+    getItem('Обзор', 'overview', <HomeOutlined />),
     getItem('Оформление', 'frontdesk', <EditOutlined />),
     getItem('Гости', 'guest', <AuditOutlined />),
     getItem('Комнаты', 'rooms', <AppstoreOutlined />),

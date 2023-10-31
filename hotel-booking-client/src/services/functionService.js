@@ -1,5 +1,9 @@
 //
 // Field is empty check
+
+import dayjs from 'dayjs';
+import { json } from 'react-router-dom';
+
 //
 export const isEmpty = (value, checkZero = false) => {
   if (value === '' || value === null || value === undefined) {
@@ -63,4 +67,41 @@ export const getEndingWords = (num) => {
   } else {
     return 'комнат';
   }
+};
+
+export const getFullDate = (date) => {
+  const getMonthNameInGenitiveCase = (date = new Date()) => {
+    return date
+      .toLocaleString('ru', {
+        month: 'long',
+        day: 'numeric',
+      })
+      .split(' ')[1];
+  };
+  const getDayWeek = (week) => {
+    switch (week) {
+      case 'Sun':
+        return 'Воскресенье';
+      case 'Mon':
+        return 'Понедельник';
+      case 'Tue':
+        return 'Вторник';
+      case 'Wed':
+        return 'Среда';
+      case 'Thu':
+        return 'Четверг';
+      case 'Fri':
+        return 'Пятница';
+      case 'Sat':
+        return 'Суббота';
+      default:
+        break;
+    }
+  };
+
+  let dayofweek = getDayWeek(date.$d.toString().substr(0, 3));
+  let day = date.$d.toString().substr(8, 2);
+  let month = getMonthNameInGenitiveCase();
+  let year = date.$d.toString().substr(11, 4);
+  return dayofweek + ', ' + day + ' ' + month + ' ' + year + ' года.';
 };

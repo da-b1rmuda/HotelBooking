@@ -29,6 +29,17 @@ app.use(
   }),
 );
 app.use(bodyParser.json());
+app.use(function (req, res, next) {
+  // HOST
+  // res.setHeader('Access-Control-Allow-Origin', 'https://jlk0wqq0-3000.euw.devtunnels.ms');
+  res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  } else {
+    next();
+  }
+});
 
 app.use('/room', roomRouter);
 app.use('/additionals', additionalsRouter);

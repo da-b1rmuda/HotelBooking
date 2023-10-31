@@ -45,6 +45,10 @@ function App() {
           path: 'advanced',
           element: <AdvancedPage />,
         },
+        {
+          path: 'overview',
+          element: <OverviewPage />,
+        },
       ],
     },
   ]);

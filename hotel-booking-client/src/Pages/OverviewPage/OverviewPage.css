@@ -1,0 +1,79 @@
+.overview-day {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.overview-card__overview {
+  display: flex;
+  justify-content: space-between;
+}
+
+.overview-card__text p {
+  font-size: 3vh;
+}
+
+.status-room__text p {
+  font-size: 2.3vh;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.overview-card__room__container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3vh;
+}
+
+.overview-card__room {
+  height: 35vh;
+}
+
+.overview-card__guests {
+  height: 40vh;
+}
+
+.fd-c {
+  flex-direction: column;
+}
+
+.status-room__list div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3vh;
+}
+
+.status-room__list div:not(:first-child) p {
+  color: rgb(158, 158, 158);
+}
+
+.overview-card__overview__text p:first-child {
+  font-size: 4vh;
+  font-weight: 500;
+}
+
+.overview-card__overview__text p:last-child {
+  font-size: 2vh;
+  color: rgb(124, 124, 124);
+}
+
+.jc-c {
+  justify-content: center;
+}
+
+.overview-card__overview__block div {
+  width: 47%;
+  border-radius: 2vh;
+}
+
+.overview-card__overview__block__text p{
+  color: #ffffff;
+  font-size: 3vh;
+}
+
+.overview-card__overview__block__text p:last-child{
+  color: #ffffff;
+  font-size: 2vh;
+  
+}

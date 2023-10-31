@@ -12,8 +12,8 @@ class RateController {
   }
   async CreateRateRoom(req, res, next) {
     try {
-      const { id_room_type, id_cancellation_policy, rate } = req.body;
-      await rateService.createRateRoom(id_room_type, id_cancellation_policy, rate);
+      const { id_room_type, id_cancellation_policy, rate, id_rate } = req.body;
+      await rateService.createRateRoom(id_room_type, id_cancellation_policy, rate, id_rate);
       return res.json('success');
     } catch (e) {
       next(e);
@@ -31,7 +31,7 @@ class RateController {
   async EditRate(req, res, next) {
     try {
       const { rate, id_room_type, id_cancellation_policy, id_deal, id_rate } = req.body;
-      await rateService.editRate(rate, id_room_type, id_cancellation_policy, id_deal, id_rate);
+      await rateService.editRate(rate, id_room_type, id_cancellation_policy, id_rate, id_deal);
       return res.json('Расценка изменена');
     } catch (e) {
       next(e);

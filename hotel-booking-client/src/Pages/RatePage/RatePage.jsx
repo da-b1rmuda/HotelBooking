@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FilterOutlined, MoreOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-import { Button, Radio, Table, Tag, Space, Dropdown, Tooltip, Modal, Input } from 'antd';
+import { Button, Table, Tag, Space, Dropdown, Tooltip, Modal, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   resetMessagesAction,
@@ -17,12 +17,6 @@ import { roomGetAction } from '../../store/actions/roomAction';
 const RatePage = () => {
   // #region Load data
   const {
-    deal,
-    isLoading: LoadingDeal,
-    error: ErrorDeal,
-    success: SuccessDeal,
-  } = useSelector((state) => state.dealStore);
-  const {
     rate,
     isLoading: LoadingRate,
     error: ErrorRate,
@@ -37,7 +31,6 @@ const RatePage = () => {
 
   const { cancelPolicy } = useSelector((state) => state.additionalsStore);
   const [data, setData] = useState([]);
-  const [dataDeal, setDataDeal] = useState([]);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -65,6 +58,7 @@ const RatePage = () => {
             room_type: item?.room_type,
             id_room_type: item?.id_room_type,
             cancellation_policy: item?.cancellation_policy,
+            id_cancellation_policy: item?.id_cancellation_policy,
             id_deal: item?.id_deal,
             deal_name: item?.deal_name !== null ? item?.deal_name : '-',
             discount: item?.discount,
@@ -88,6 +82,7 @@ const RatePage = () => {
               room_type: item?.room_type,
               id_room_type: item?.id_room_type,
               cancellation_policy: item?.cancellation_policy,
+              id_cancellation_policy: item?.id_cancellation_policy,
               id_deal: item?.id_deal,
               deal_name: item?.deal_name !== null ? item?.deal_name : '-',
               discount: item?.discount,
@@ -105,6 +100,7 @@ const RatePage = () => {
   };
   // #endregion
 
+  // #region Set count room left
   const setCountRoom = (room_type) => {
     let count = 0;
     room.map((item, _) => {
@@ -114,6 +110,7 @@ const RatePage = () => {
     });
     return count;
   };
+  // #endregion
 
   const [selectedRow, setSelectedRow] = useState();
   const columns = [
@@ -201,10 +198,52 @@ const RatePage = () => {
     return color;
   };
 
+  // #region Notification
+  const [messageApi, contextHolder] = message.useMessage();
+  useEffect(() => {
+    if (!isEmpty(SuccessRate)) {
+      successCreateRate(SuccessRate);
+      dispatch(rateGetAction());
+      dispatch(resetMessagesAction());
+    } else if (!isEmpty(ErrorRate)) {
+      errorCreateRate(ErrorRate);
+      dispatch(resetMessagesAction());
+    }
+    // eslint-disable-next-line
+  }, [SuccessRate, ErrorRate]);
+  const successCreateRate = (success) => {
+    messageApi.open({
+      type: 'success',
+      content: success,
+    });
+  };
+  const errorCreateRate = (error) => {
+    messageApi.open({
+      type: 'error',
+      content: error,
+    });
+  };
+  // #endregion
+
+  // #region Delete row
+  const { confirm } = Modal;
+  const showDeleteConfirm = () => {
+    confirm({
+      title: 'Вы уверены, что хотите удалить расценку?',
+      icon: <ExclamationCircleFilled />,
+      okText: 'Да',
+      okType: 'danger',
+      cancelText: 'Нет',
+      onOk() {
+        dispatch(rateDeleteAction(selectedRow));
+      },
+    });
+  };
+  // #endregion
+
   // #region Edit / Create deal
   const [onCreateRate, setOnCreateRate] = useState(true);
-  const [onEditRateRoom, setOnEditRateRoom] = useState(false);
-  const [onEditRateDeal, setOnEditRateDeal] = useState(false);
+  const [onEditRate, setOnEditRate] = useState(false);
   const contentView = onCreateRate ? (
     <Table
       pagination={{
@@ -218,10 +257,9 @@ const RatePage = () => {
   ) : (
     <RateCreate
       setOnCreateRate={setOnCreateRate}
-      onEditRateRoom={onEditRateRoom}
-      setOnEditRateRoom={setOnEditRateRoom}
-      onEditRateDeal={onEditRateDeal}
-      setOnEditRateDeal={setOnEditRateDeal}
+      onEditRate={onEditRate}
+      setOnEditRate={setOnEditRate}
+      editRow={selectedRow}
       data={data}
     />
   );
@@ -238,17 +276,20 @@ const RatePage = () => {
       key: 'delete',
     },
   ];
-  const onClick = ({ key, items }) => {
+  const onClick = ({ key }) => {
     if (key === 'delete') {
-      // showDeleteConfirm();
+      showDeleteConfirm();
     }
     if (key === 'edit') {
-      console.log(selectedRow);
-      // setOnCreateRoom(false);
-      // setOnEditRoom(true);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id_rate === selectedRow) {
+          setOnCreateRate(false);
+          setOnEditRate(true);
+          return;
+        }
+      }
     }
   };
-
   // #endregion
 
   // #region Show clue for cancellation policy
@@ -269,6 +310,7 @@ const RatePage = () => {
 
   return (
     <>
+      {contextHolder}
       {onCreateRate ? (
         <>
           <h2>Расценки</h2>

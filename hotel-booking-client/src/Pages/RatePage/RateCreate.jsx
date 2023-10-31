@@ -9,6 +9,8 @@ import {
   resetMessagesAction,
   rateGetAction,
 } from '../../store/actions/rateAction';
+
+import { rateEditAction } from '../../store/actions/rateAction';
 import './RatePage.css';
 const { Meta } = Card;
 
@@ -28,7 +30,6 @@ const RateCreate = (props) => {
     success: SuccessDeal,
   } = useSelector((state) => state.dealStore);
   const { typeRoom, cancelPolicy } = useSelector((state) => state.additionalsStore);
-
   const typeData = () => {
     let temp = [];
     let exception = [];
@@ -99,9 +100,41 @@ const RateCreate = (props) => {
   });
 
   //
+  // Load data for editing
+  //
+  useEffect(() => {
+    if (props.onEditRate === true) {
+      loadDataForEdit();
+    }
+    // eslint-disable-next-line
+  }, [props.onEditRate]);
+
+  const loadDataForEdit = () => {
+    rate.map((item) => {
+      setIsCreateRoom(true);
+      if (item.id_rate === props?.editRow) {
+        setDataField({
+          ...dataField,
+          idRoomTypef: item.id_room_type,
+          typeRoomf: item.room_type,
+          cancelPolicyf: item.cancellation_policy,
+          idCancellationPolicyf: item.id_cancellation_policy,
+          rateRoomf: item.rate,
+        });
+      }
+    });
+  };
+
+  //
   // Back button
   //
   const onBackButton = () => {
+    if (props.onEditRate) {
+      //Закрыть окно редактирования\добавления
+      props.setOnCreateRate(true);
+      //Изменяем статус редактирования
+      props.setOnEditRate(false);
+    }
     if (isCreateDiscount || isCreateRoom) {
       setIsCreateDiscount(false);
       setIsCreateRoom(false);
@@ -133,7 +166,24 @@ const RateCreate = (props) => {
   };
 
   const onCreateRate = () => {
+    rateEditAction();
     if (props.onEditRate) {
+      if (
+        isEmpty(dataField.typeRoomf) ||
+        isEmpty(dataField.cancelPolicyf) ||
+        isEmpty(dataField.rateRoomf)
+      ) {
+        errorEmptyField();
+      } else {
+        dispatch(
+          rateEditAction(
+            dataField.idRoomTypef,
+            dataField.idCancellationPolicyf,
+            dataField.rateRoomf,
+            props.editRow,
+          ),
+        );
+      }
     } else {
       if (isCreateDiscount) {
         if (
@@ -152,6 +202,7 @@ const RateCreate = (props) => {
               getRateRoom(dataField.typeRoomf),
             ),
           );
+          setDataField({ ...dataField, discountRoomf: null });
         }
       } else {
         if (
@@ -164,6 +215,7 @@ const RateCreate = (props) => {
           dispatch(
             rateCreateRoomAction(dataField.typeRoomf, dataField.cancelPolicyf, dataField.rateRoomf),
           );
+          setDataField({ ...dataField, typeRoomf: null });
         }
       }
     }
@@ -182,7 +234,7 @@ const RateCreate = (props) => {
     <>
       {contextHolder}
       {props.onEditRate ? (
-        <h2>Редактирование расценки</h2>
+        <h2>Редактирование расценки / Расценка комнаты</h2>
       ) : (
         <h2>
           Создание расценки

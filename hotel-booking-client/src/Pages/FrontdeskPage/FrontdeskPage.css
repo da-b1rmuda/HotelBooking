@@ -7,7 +7,7 @@
   padding-top: 3vh;
 }
 
-.flex-center{
+.flex-center {
   align-items: center;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .text-fontdesk p {
-  color: #383E49;
+  color: #383e49;
   font-size: 2vh;
 }
 .text-fontdesk span {
@@ -30,7 +30,7 @@
   padding-left: 1vh;
   padding-right: 1vh;
 }
-.counter-fontdesk{
+.counter-fontdesk {
   padding-left: 5vh;
   justify-content: center;
   align-items: center;
@@ -38,4 +38,44 @@
 
 .ant-card-body {
   padding-top: 10px !important;
+}
+
+.offChild {
+  color: #d8d8d8 !important;
+}
+
+.inputs_fd span {
+  color: #5d6679;
+  font-size: 2vh;
+}
+
+.w50p div {
+  width: 50%;
+}
+
+.g3 {
+  gap: 3vh;
+}
+
+.card-rate {
+  margin-bottom: 2vh;
+}
+
+.card-rate p:not(:first-child) {
+  margin-top: 1vh;
+}
+
+.card-price  {
+  margin-top: 1vh;
+}
+
+.card-rate p {
+  color: #5d6679;
+  padding-right: 1vh;
+}
+
+.card-button {
+  margin-top: 1vh;
+  display: flex;
+  justify-content: end;
 }

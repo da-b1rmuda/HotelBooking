@@ -1,149 +1,55 @@
-import React, { useState } from 'react';
-import { ArrowLeftOutlined, PlusOutlined, MinusOutlined, MoreOutlined } from '@ant-design/icons';
-import { Button, Card, Radio, DatePicker, Table, Tag, Space, Dropdown } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Button, Steps } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { roomGetAction } from '../../store/actions/roomAction';
 import './FrontdeskPage.css';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import StepSecond from './StepSecond';
+import StepThird from './StepThird';
+import StepOne from './StepOne';
+import Loading from '../../components/Loading/Loading';
+import { rateGetAction } from '../../store/actions/rateAction';
+dayjs.extend(customParseFormat);
 
 const FrontdeskCreate = (props) => {
-  const [onEditFrontdesk, setOnEditFrontdesk] = useState(false);
-  const [selectedRow, setSelectedRow] = useState();
-  const columns = [
-    {
-      title: '№ Комнаты',
-      dataIndex: 'number_room',
-      key: 'number_room',
-      render: (text) => <h3>{text}</h3>,
-    },
-    {
-      title: 'Тип комнаты',
-      dataIndex: 'room_type',
-      key: 'room_type',
-    },
-    {
-      title: 'Этаж',
-      dataIndex: 'floor',
-      key: 'floor',
-    },
-    {
-      title: 'Удобства',
-      key: 'facility',
-      dataIndex: 'facility',
-      width: 450,
-      render: (_, { facility }) => (
-        <>
-          {facility?.map((tag) => {
-            return (
-              <Tag color={'green'} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Статус',
-      dataIndex: 'status',
-      key: 'status',
-      // filters: loadFilter(),
-      // render: (_, { status }) => <Tag color={getColorStatus(status)}>{status}</Tag>,
-      // filteredValue: filteredInfo.status || null,
-      // onFilter: (value, record) => record.status.includes(value),
-      // filterIcon: <svg width={1} height={1}></svg>,
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="large">
-          <Dropdown menu={{ items, onClick, record }} trigger={['click']}>
-            <Space>
-              <Button
-                onClick={() => setSelectedRow(record.key)}
-                shape="circle"
-                icon={<MoreOutlined />}
-              />
-            </Space>
-          </Dropdown>
-        </Space>
-      ),
-    },
-  ];
-  const getColorStatus = (status) => {
-    let color;
+  //
+  // Load data
+  //
+  const { room, isLoading: roomLoading } = useSelector((state) => state.roomStore);
+  const { rate, isLoading: rateLoading } = useSelector((state) => state.rateStore);
+  const { statusRoom, typeRoom } = useSelector((state) => state.additionalsStore);
+
+  console.log(typeRoom);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(roomGetAction());
+    dispatch(rateGetAction());
     // eslint-disable-next-line
-    statusRoom.map((item) => {
-      if (item.status === status) {
-        color = item.color;
-      }
-    });
-    return color;
-  };
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
-
-  //
-  // Dropdown menu
-  //
-  const items = [
-    {
-      label: 'Редактировать',
-      key: 'edit',
-    },
-    {
-      label: 'Удалить',
-      key: 'delete',
-    },
-  ];
-  const onClick = ({ key, items }) => {
-    if (key === 'delete') {
-      // showDeleteConfirm();
+  }, []);
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line
+  }, [room]);
+  const [data, setData] = useState([]);
+  const loadData = () => {
+    let tempData = [];
+    if (room.length !== 0) {
+      // eslint-disable-next-line
+      room.map((item) => {
+        tempData.push({
+          key: item.id_room,
+          number_room: '#' + item?.room_number,
+          floor: item?.room_floor,
+          room_type: item?.room_type,
+          facility: item?.facility,
+          status: item?.status,
+        });
+      });
+      setData(tempData);
     }
-    if (key === 'edit') {
-      // setOnCreateRoom(false);
-      // setOnEditRoom(true);
-    }
-  };
-
-  //
-  // Date picker
-  //
-  const onChange = (value, dateString) => {
-    console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
-  };
-  const onOk = (value) => {
-    console.log('onOk: ', value);
-  };
-
-  //
-  // Field is empty check
-  //
-  const isEmpty = (value) => {
-    if (value === '' || value === null || value === undefined) {
-      return true;
-    }
-    return false;
   };
 
   //
@@ -152,79 +58,100 @@ const FrontdeskCreate = (props) => {
   const onBackButton = () => {
     props.setOnCreateBooking(false);
   };
+
+  //Tabs
+  const [current, setCurrent] = useState(0);
+  const onChangeStep = (value) => {
+    setCurrent(value);
+  };
+
+  const [selectedRow, setSelectedRow] = useState();
+
+  const selectedRoom = () => {
+    for (let i = 0; i < room.length; i++) {
+      if (room[i].id_room === selectedRow) {
+        return room[i];
+      }
+    }
+  };
+
+  const [dataBooking, setDataBooking] = useState({
+    room_type: 'Одиночная',
+    arrival_date: '',
+    departure_date: '',
+    count_adults: 0,
+    count_children: 0,
+    firstName: '',
+    lastName: '',
+    surname: '',
+    number: '',
+    email: '',
+    rate: null,
+  });
+
   return (
     <>
-      {onEditFrontdesk ? <h2>Изменение заказов</h2> : <h2>Оформление комнаты</h2>}
-      <Button
-        style={{ marginTop: '1vh' }}
-        type="text"
-        icon={<ArrowLeftOutlined />}
-        onClick={() => onBackButton()}>
-        Назад
-      </Button>
-      <Card style={{ marginTop: '2vh' }}>
-        <div className="d-f jc-sb flex-center">
-          <div>
-            <div className="d-f jc-sb mt-10">
-              <Radio.Group defaultValue="a" size="large">
-                <Radio.Button value="a">Все комнаты</Radio.Button>
-                <Radio.Button value="b">Одиночная</Radio.Button>
-                <Radio.Button value="c">Двойная</Radio.Button>
-                <Radio.Button value="d">Тройная</Radio.Button>
-                <Radio.Button value="e">VIP</Radio.Button>
-              </Radio.Group>
-            </div>
-            <div className="d-f p-t-3 text-fontdesk">
-              <div className="p-r-2">
-                <p>Заезд</p>
-                <DatePicker showTime={{ format: 'HH:mm' }} onChange={onChange} onOk={onOk} />
-              </div>
-              <div>
-                <p>Выезд</p>
-                <DatePicker showTime={{ format: 'HH:mm' }} onChange={onChange} onOk={onOk} />
-              </div>
-            </div>
-            <div className="d-f text-fontdesk p-t-3 ">
-              <div className="d-f p-r-2">
-                <div>
-                  <p>Взрослые</p>
-                  <span>Старше 12 лет</span>
-                </div>
-                <div className="d-f counter-fontdesk">
-                  <Button type="primary" shape="circle" icon={<PlusOutlined />} />
-                  <p>0</p>
-                  <Button type="primary" shape="circle" icon={<MinusOutlined />} />
-                </div>
-              </div>
-              <div className="d-f">
-                <div>
-                  <p>Дети</p>
-                  <span>0-12 лет</span>
-                </div>
-                <div className="d-f counter-fontdesk">
-                  <Button type="primary" shape="circle" icon={<PlusOutlined />} />
-                  <p>0</p>
-                  <Button type="primary" shape="circle" icon={<MinusOutlined />} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <Button size="large" type="primary">
-              Проверить свободные
+      {roomLoading && rateLoading === true ? (
+        <Loading />
+      ) : (
+        <>
+          <h2>Оформление комнаты</h2>
+          {current === 0 && (
+            <Button
+              style={{ marginTop: '1vh' }}
+              type="text"
+              icon={<ArrowLeftOutlined />}
+              onClick={() => onBackButton()}>
+              Назад
             </Button>
-          </div>
-        </div>
-      </Card>
-      <Table
-        pagination={{
-          pageSize: 6,
-        }}
-        style={{ marginTop: '10px' }}
-        columns={columns}
-        dataSource={isEmpty(data) ? [] : data}
-        // onChange={handleChange}
-      />
+          )}
+          <Steps
+            current={current}
+            items={[
+              {
+                title: 'Шаг 1',
+                description: 'Поиск подходящей комнаты',
+              },
+              {
+                title: 'Шаг 2',
+                description: 'Ввод личных данных',
+              },
+              {
+                title: 'Шаг 3',
+                description: 'Оплата',
+              },
+            ]}
+          />
+          {current === 0 && (
+            <StepOne
+              dataBooking={dataBooking}
+              setDataBooking={setDataBooking}
+              onChangeStep={onChangeStep}
+              statusRoom={statusRoom}
+              typeRoom={typeRoom}
+              rate={rate}
+              data={data}
+              setSelectedRow={setSelectedRow}
+              selectedRoom={selectedRoom()}
+            />
+          )}
+          {current === 1 && (
+            <StepSecond
+              dataBooking={dataBooking}
+              setDataBooking={setDataBooking}
+              onChangeStep={onChangeStep}
+              selectedRoom={selectedRoom()}
+            />
+          )}
+          {current === 2 && (
+            <StepThird
+              dataBooking={dataBooking}
+              setDataBooking={setDataBooking}
+              onChangeStep={onChangeStep}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };

@@ -33,7 +33,6 @@ export const rateCreateDealAction =
   (id_room_type, id_cancellation_policy, id_deal, rate) => async (dispatch) => {
     try {
       dispatch(rateCreateDeal());
-      console.log(id_room_type, id_cancellation_policy, id_deal, rate);
       await RateService.createRateDeal(id_room_type, id_cancellation_policy, id_deal, rate);
       dispatch(rateCreateDealSuccess('Расценка акции успешно создана'));
     } catch (e) {
@@ -42,10 +41,10 @@ export const rateCreateDealAction =
   };
 
 export const rateEditAction =
-  (rate, id_room_type, id_cancellation_policy, id_deal, id_rate) => async (dispatch) => {
+  (id_room_type, id_cancellation_policy, rate, id_rate) => async (dispatch) => {
     try {
       dispatch(rateEdit());
-      await RateService.editRate(rate, id_room_type, id_cancellation_policy, id_deal, id_rate);
+      await RateService.editRate(id_room_type, id_cancellation_policy, rate, id_rate);
       dispatch(rateEditSuccess('Расценка успешно изменена'));
     } catch (e) {
       dispatch(rateEditError(e.response?.data.message));

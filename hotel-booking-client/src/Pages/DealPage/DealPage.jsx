@@ -365,7 +365,6 @@ const DealPage = () => {
                     setSearchText(e.target.value);
                   }}
                 />
-                {console.log(searchText)}
               </div>
               <Button type={'primary'} size={'large'} onClick={() => setOnCreateDeal(false)}>
                 Добавить акцию

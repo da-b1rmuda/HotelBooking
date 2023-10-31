@@ -85,8 +85,6 @@ const DealCreate = (props) => {
 
   const loadDataForEdit = () => {
     deal.map((item) => {
-      console.log(item.start_date);
-
       if (item.id_deal === props?.editRow) {
         // Получение id по названию поля
         let id_room_type;
@@ -101,9 +99,7 @@ const DealCreate = (props) => {
             id_status_deal = sub.id_status_deal;
           }
         });
-        console.log(item.start_date);
         // Загрузка данных в стэйт
-        console.log(getConvertedDate(item.start_date));
         setDataField({
           ...dataField,
           numberDealf: item.deal_number,
@@ -160,34 +156,33 @@ const DealCreate = (props) => {
     } else {
       if (
         isEmpty(dataField.numberDealf) ||
-        isEmpty(dataField.nameDealf.target?.value) ||
+        isEmpty(dataField.nameDealf) ||
         isEmpty(dataField.discountDealf, true) ||
         isEmpty(dataField.dateStartf) ||
         isEmpty(dataField.dateEndf) ||
         isEmpty(dataField.typeRoomf, true) ||
         isEmpty(dataField.statusDealf, true) ||
         isEmpty(dataField.reservationLeftf, true) ||
-        isEmpty(dataField.descriptionDealf.target?.value)
+        isEmpty(dataField.descriptionDealf)
       ) {
         errorEmptyField();
       } else {
         dispatch(
           dealCreateAction(
             dataField.numberDealf,
-            dataField.nameDealf.target.value,
+            dataField.nameDealf,
             dataField.discountDealf,
             dataField.dateStartf,
             dataField.dateEndf,
             dataField.typeRoomf,
             dataField.statusDealf,
             dataField.reservationLeftf,
-            dataField.descriptionDealf.target.value,
+            dataField.descriptionDealf,
           ),
         );
       }
     }
   };
-
   return (
     <>
       {contextHolder}
@@ -231,7 +226,6 @@ const DealCreate = (props) => {
         </Col>
         <Col span={4.5}>
           <Card title="Дата начала акции" bordered={true}>
-            {console.log(dataField.dateStartf)}
             <DatePicker
               format={'DD.MM.YYYY'}
               allowClear={false}

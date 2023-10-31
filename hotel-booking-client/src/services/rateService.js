@@ -19,12 +19,11 @@ export default class RateService {
       rate,
     });
   }
-  static async editRate(rate, id_room_type, id_cancellation_policy, id_deal, id_rate) {
+  static async editRate(id_room_type, id_cancellation_policy, rate, id_rate) {
     return await $api.put('/rate/editRate', {
-      rate,
       id_room_type,
       id_cancellation_policy,
-      id_deal,
+      rate,
       id_rate,
     });
   }
