@@ -12,6 +12,7 @@ import AdvancedPage from './Pages/AdvancedPage/AdvancedPage';
 import { ConfigProvider } from 'antd';
 import locale from 'antd/locale/ru_RU';
 import 'dayjs/locale/ru';
+import LoginPage from './Pages/LoginPage/LoginPage';
 
 function App() {
   const [themeMenu, setThemeMenu] = useState('light');
@@ -48,6 +49,10 @@ function App() {
         {
           path: 'overview',
           element: <OverviewPage />,
+        },
+        {
+          path: 'login',
+          element: <LoginPage />,
         },
       ],
     },
