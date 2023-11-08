@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Input, Button, Descriptions, Tag } from 'antd';
+import React, { useState } from 'react';
+import { Card, Input, Button, Descriptions, Tag, Form } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 
 const StepSecond = ({ dataBooking, setDataBooking, onChangeStep, selectedRoom, filterRate }) => {
@@ -10,99 +10,138 @@ const StepSecond = ({ dataBooking, setDataBooking, onChangeStep, selectedRoom, f
       return item.rate;
     }
   };
-  const items = [
-    {
-      key: '1',
-      label: 'Номер комнаты',
-      children: selectedRoom.room_number,
+
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    console.log('Received values of form: ', values);
+    onChangeStep(2);
+  };
+  const handleClick = () => {
+    form.submit();
+  };
+
+  const formItemLayout = {
+    labelCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 8,
+      },
     },
-    {
-      key: '2',
-      label: 'Тип комнаты',
-      children: selectedRoom.room_type,
+    wrapperCol: {
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 16,
+      },
     },
-    {
-      key: '3',
-      label: 'Этаж',
-      children: selectedRoom.room_floor,
-    },
-    {
-      key: '5',
-      label: 'Цена номера за сутки',
-      children: (
-        <Tag color={dataBooking.rate.discount !== null ? 'green' : 'blue'}>
-          {setDiscountRate(dataBooking.rate) + ' руб.'}
-        </Tag>
-      ),
-    },
-  ];
+  };
 
   return (
     <>
-      <Card style={{ marginBottom: '2vh', marginTop: '2vh' }}>
-        <Descriptions title="Выбранный номер" items={items} style={{ fontSize: '2vh' }} />
-      </Card>
-      <Card>
-        <div className="d-f jc-sb w50p g3 inputs_fd" style={{ marginBottom: '2vh' }}>
-          <div>
-            <span style={{ fontSize: '2vh' }}>Имя</span>
-            <Input
-              showCount
-              placeholder="Введите имя..."
-              maxLength={50}
-              value={dataBooking.firstName}
-              onChange={(e) => setDataBooking({ ...dataBooking, firstName: e.target.value })}
-            />
+      <div className="d-f jc-sb">
+        <Card style={{ marginBottom: '2vh', marginTop: '2vh', width: '48%' }}>
+          <p className="title-card-step-two">Выбранная комната</p>
+          <div className="d-f fd-c jc-sb">
+            <div style={{ paddingBottom: '15vh' }}>
+              <div className="desc-block d-f">
+                <p>Номер комнаты:ㅤ</p>
+                <p>{selectedRoom.room_number}</p>
+              </div>
+              <div className="desc-block d-f">
+                <p>Тип комнаты:ㅤ</p>
+                <p>{selectedRoom.room_type}</p>
+              </div>
+              <div className="desc-block d-f">
+                <p>Этаж:ㅤ</p>
+                <p>{selectedRoom.room_floor}</p>
+              </div>
+            </div>
+            <div>
+              <div className="desc-block d-f">
+                <p>Цена номера за сутки:ㅤ</p>
+                <Tag color={dataBooking.rate.discount !== null ? 'green' : 'blue'}>
+                  {setDiscountRate(dataBooking.rate) + ' руб.'}
+                </Tag>
+              </div>
+            </div>
           </div>
-          <div>
-            <span style={{ fontSize: '2vh' }}>Фамилия</span>
-            <Input
-              showCount
-              placeholder="Введите фамилию..."
-              maxLength={50}
-              value={dataBooking.lastName}
-              onChange={(e) => setDataBooking({ ...dataBooking, lastName: e.target.value })}
-            />
-          </div>
-          <div>
-            <span style={{ fontSize: '2vh' }}>Отчество</span>
-            <Input
-              showCount
-              placeholder="Введите отчество..."
-              maxLength={50}
-              value={dataBooking.surname}
-              onChange={(e) => setDataBooking({ ...dataBooking, surname: e.target.value })}
-            />
-          </div>
-        </div>
-        <div className="d-f jc-sb w50p g3 inputs_fd">
-          <div>
-            <span style={{ fontSize: '2vh' }}>Телефон</span>
-            <Input
-              placeholder="Введите номер телефона..."
-              prefix={'+7'}
-              maxLength={11}
-              value={dataBooking.number}
-              onChange={(e) => setDataBooking({ ...dataBooking, number: e.target.value })}
-            />
-          </div>
-          <div>
-            <span style={{ fontSize: '2vh' }}>Почта</span>
-            <Input
-              showCount
-              placeholder="Введите почту..."
-              maxLength={50}
-              value={dataBooking.email}
-              onChange={(e) => setDataBooking({ ...dataBooking, email: e.target.value })}
-            />
-          </div>
-        </div>
-      </Card>
+        </Card>
+        <Card style={{ marginBottom: '2vh', marginTop: '2vh', width: '48%' }}>
+          <p className="title-card-step-two">Контактная информация</p>
+          <Form
+            {...formItemLayout}
+            form={form}
+            className="form-card-step-two"
+            name="basic"
+            onFinish={onFinish}
+            // onFinishFailed={onFinishFailed}
+
+            autoComplete="off"
+            style={{
+              maxWidth: 600,
+            }}
+            scrollToFirstError>
+            <Form.Item
+              label="Имя"
+              name="name"
+              rules={[
+                {
+                  required: true,
+                  message: 'Пожалуйста введите имя!',
+                },
+              ]}>
+              <Input placeholder="Виктор" />
+            </Form.Item>
+            <Form.Item
+              label="Фамилия"
+              name="surname"
+              rules={[
+                {
+                  required: true,
+                  message: 'Пожалуйста введите фамилию!',
+                },
+              ]}>
+              <Input placeholder="Антипов" />
+            </Form.Item>
+            <Form.Item
+              label="Отчество"
+              name="fathername"
+              rules={[
+                {
+                  required: true,
+                  message: 'Пожалуйста введите отчество!',
+                },
+              ]}>
+              <Input placeholder="Александрович" />
+            </Form.Item>
+            <Form.Item
+              label="E-mail"
+              name="email"
+              rules={[
+                {
+                  type: 'email',
+                  message: 'Введена некорректная почта!',
+                },
+              ]}>
+              <Input placeholder="example@mail.ru" />
+            </Form.Item>
+            <Form.Item
+              label="Номер телефона"
+              name="phone"
+              rules={[{ required: true, message: 'Пожалуйста введите номер телефона!' }]}>
+              <Input addonBefore={'+7'} style={{ width: '100%' }} placeholder="(908)-908-08-08" />
+            </Form.Item>
+          </Form>
+        </Card>
+      </div>
       <div style={{ marginTop: '3vh', display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={() => onChangeStep(0)} icon={<ArrowLeftOutlined />}>
           Назад
         </Button>
-        <Button type="primary" onClick={() => onChangeStep(2)}>
+        <Button type="primary" htmlType="submit" onClick={handleClick}>
           Далее <ArrowRightOutlined />
         </Button>
       </div>
