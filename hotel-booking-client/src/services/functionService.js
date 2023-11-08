@@ -1,10 +1,3 @@
-//
-// Field is empty check
-
-import dayjs from 'dayjs';
-import { json } from 'react-router-dom';
-
-//
 export const isEmpty = (value, checkZero = false) => {
   if (value === '' || value === null || value === undefined) {
     return true;
@@ -104,4 +97,11 @@ export const getFullDate = (date) => {
   let month = getMonthNameInGenitiveCase();
   let year = date.$d.toString().substr(11, 4);
   return dayofweek + ', ' + day + ' ' + month + ' ' + year + ' года.';
+};
+
+export const firstLetterNameUser = (login) => {
+  let letter = login;
+  if (login !== undefined && login !== null) {
+    return login[0].toUpperCase();
+  }
 };

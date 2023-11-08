@@ -4,46 +4,9 @@ import { Card, Tag } from 'antd';
 import { getFullDate } from '../../services/functionService';
 import './OverviewPage.css';
 import ReactECharts from 'echarts-for-react';
+import { optionVisitors, optionActivityGuest, optionAvailableRooms } from './optionsCharts';
 
 const OverviewPage = () => {
-  //Диаграмма посешение гостей
-  let option = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow',
-      },
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['Август', 'Сентябрь', 'Ноябрь'],
-        axisTick: {
-          alignWithLabel: true,
-        },
-      },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-      },
-    ],
-    series: [
-      {
-        name: 'Гости',
-        type: 'bar',
-        barWidth: '60%',
-        data: [147, 210, 107],
-      },
-    ],
-  };
-
   return (
     <div>
       <div className="overview-day">
@@ -177,9 +140,9 @@ const OverviewPage = () => {
           </Card>
           <Card style={{ width: '36%' }}>
             <div className="overview-card__room">
-              <p>Посетители</p>
               <div>
-                <ReactECharts option={option} style={{ width: '90%', height: '30vh' }} />
+                <p>Посетители</p>
+                <ReactECharts option={optionVisitors} style={{ width: '90%', height: '30vh' }} />
               </div>
             </div>
           </Card>
@@ -188,11 +151,13 @@ const OverviewPage = () => {
           <Card style={{ width: '68%', marginBottom: '3vh' }}>
             <div className="overview-card__guests">
               <p>Активность гостей</p>
+              <ReactECharts option={optionActivityGuest} />
             </div>
           </Card>
-          <Card style={{ width: '28%' }}>
+          <Card style={{ width: '28%', marginBottom: '3vh' }}>
             <div className="overview-card__guests">
               <p>Свободные комнаты</p>
+              <ReactECharts option={optionAvailableRooms} />
             </div>
           </Card>
         </div>

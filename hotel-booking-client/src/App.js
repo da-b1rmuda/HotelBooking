@@ -13,6 +13,7 @@ import { ConfigProvider } from 'antd';
 import locale from 'antd/locale/ru_RU';
 import 'dayjs/locale/ru';
 import LoginPage from './Pages/LoginPage/LoginPage';
+import RegestrationPage from './Pages/RegistrationPage/RegestrationPage';
 
 function App() {
   const [themeMenu, setThemeMenu] = useState('light');
@@ -53,6 +54,10 @@ function App() {
         {
           path: 'login',
           element: <LoginPage />,
+        },
+        {
+          path: 'registration',
+          element: <RegestrationPage />,
         },
       ],
     },
