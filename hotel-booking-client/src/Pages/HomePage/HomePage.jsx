@@ -25,11 +25,23 @@ import {
   getTypeAction,
   getStatusDealAction,
   getCancelPolicyAction,
+  getStatusGuestAction,
+  getStatusGuestRoomAction,
 } from '../../store/actions/additionalsAction';
 import Loading from '../../components/Loading/Loading';
-import { LoadingAction, logoutAction, resetMessagesAction } from '../../store/actions/userAction';
+import {
+  LoadingAction,
+  logoutAction,
+  resetMessagesAction,
+  userGetAction,
+} from '../../store/actions/userAction';
 import { isEmpty, firstLetterNameUser } from '../../services/functionService';
 import { userLogout } from '../../store/reducers/userReducer';
+import { guestsGetAction } from '../../store/actions/bookingAction';
+import { roomGetAction } from '../../store/actions/roomAction';
+import { dealGetAction } from '../../store/actions/dealAction';
+import { rateGetAction } from '../../store/actions/rateAction';
+
 const { Header, Content, Footer, Sider } = Layout;
 const { useToken } = theme;
 
@@ -43,6 +55,7 @@ const HomePage = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
+    dispatch(userGetAction());
     setUser(JSON.parse(localStorage.getItem('userInfo')));
     dispatch(LoadingAction(true));
   }, []);
@@ -65,6 +78,12 @@ const HomePage = () => {
       dispatch(getTypeAction());
       dispatch(getStatusDealAction());
       dispatch(getCancelPolicyAction());
+      dispatch(guestsGetAction());
+      dispatch(roomGetAction());
+      dispatch(dealGetAction());
+      dispatch(rateGetAction());
+      dispatch(getStatusGuestAction());
+      dispatch(getStatusGuestRoomAction());
     }
 
     dispatch(LoadingAction(false));
@@ -109,7 +128,7 @@ const HomePage = () => {
     getItem('Комнаты', 'rooms', <AppstoreOutlined />),
     getItem('Акции', 'deal', <FireOutlined />),
     getItem('Расценки', 'rate', <DollarOutlined />),
-    getItem('Дополнительно', 'advanced', <ControlOutlined />),
+    // getItem('Дополнительно', 'advanced', <ControlOutlined />),
   ];
 
   //
@@ -160,7 +179,9 @@ const HomePage = () => {
           <Sider style={{ background: themeMenu === 'light' ? 'white' : '' }} collapsed={collapsed}>
             <div className="d-f ai-c jc-c">
               <img src="/image/logo.png" alt="logo" style={{ width: '7vh' }} />
-              <div className="loginPage__logo">
+              <div
+                className="loginPage__logo"
+                style={collapsed ? { display: 'none' } : { display: 'block' }}>
                 <p style={{ fontSize: '3.5vh' }}>BHotel</p>
               </div>
             </div>
@@ -211,9 +232,7 @@ const HomePage = () => {
                   <Avatar
                     shape="square"
                     size="large"
-                    style={{ backgroundColor: '#3B92FF', cursor: 'pointer' }}
-                    // onClick={() => console.log(1)}
-                  >
+                    style={{ backgroundColor: '#3B92FF', cursor: 'pointer' }}>
                     <p className="userName noselect">{firstLetterNameUser(user?.login)}</p>
                   </Avatar>
                 </Dropdown>

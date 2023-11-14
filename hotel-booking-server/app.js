@@ -9,6 +9,8 @@ import additionalsRouter from './routes/additionals.routes.js';
 import dealRouter from './routes/deal.routes.js';
 import rateRouter from './routes/rate.routes.js';
 import userRouter from './routes/user.routes.js';
+import bookingRouter from './routes/booking.routes.js';
+import querysRouter from './routes/querys.routes.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 8080;
@@ -47,6 +49,8 @@ app.use('/additionals', additionalsRouter);
 app.use('/deal', dealRouter);
 app.use('/rate', rateRouter);
 app.use('/user', userRouter);
+app.use('/booking', bookingRouter);
+app.use('/querys', querysRouter)
 
 app.use(errorMiddleware);
 

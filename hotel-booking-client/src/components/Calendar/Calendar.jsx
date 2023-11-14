@@ -1,70 +1,88 @@
 import React from 'react';
-import { Badge, Calendar } from 'antd';
+import { Badge, Calendar, Tooltip } from 'antd';
+import dayjs from 'dayjs';
 import './Calendar.css';
 
-const getListData = (value) => {
-  let listData;
-  switch (value.date()) {
-    case 8:
-      listData = [
-        {
+const getListData = (value, data) => {
+  let listData = [];
+
+  const getStatus = (date, type) => {
+    let now = dayjs();
+    // if (now.date() < date.date()) {
+    //   return 'dueIn';
+    // } else {
+    //   return 'checkedOut';
+    // }
+
+    // if(date.date() > now.date()){
+    //   return 'checkedOut';
+    // } else {
+    //   if(date.data >)
+    // }
+
+    if (type === 'depart') {
+      return 'checkedOut';
+    } else {
+      if (date.format('YYYY-MM-DD') > now.format('YYYY-MM-DD')) {
+        return 'dueIn';
+      } else {
+        return 'checkedIn';
+      }
+    }
+  };
+  if (data?.length) {
+    for (let i = 0; i < data.length; i++) {
+      if (
+        dayjs(data[i]?.arrivalDate).date() === value.date() &&
+        dayjs(data[i]?.departureDate).format('YYYY-MM-DD') >= dayjs().format('YYYY-MM-DD')
+      ) {
+        listData.push({
           type: '',
-          content: 'Александр П.',
-          status: 'checkedIn',
-          month: 8,
-        },
-      ];
-      break;
-    case 9:
-      listData = [
-        {
+          content: data[i]?.lastName + ' ' + data[i]?.firstName + ' ' + data[i]?.fatherName,
+          status: getStatus(dayjs(data[i]?.arrivalDate), 'arrive'),
+          month: dayjs(data[i]?.arrivalDate).month() + 1,
+          room: data[i]?.numberRoom,
+        });
+      }
+      if (
+        dayjs(data[i]?.departureDate).date() === value.date() &&
+        dayjs(data[i]?.departureDate).format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')
+      ) {
+        listData.push({
           type: '',
-          content: 'Игорь С.',
-          status: 'checkedOut',
-          month: 8,
-        },
-      ];
-      break;
-    case 10:
-      listData = [
-        {
-          type: '',
-          content: 'Александр П.',
-          status: 'dueIn',
-          month: 9,
-          room: 326,
-        },
-        {
-          type: '',
-          content: 'Игорь С.',
-          status: 'dueOut',
-          month: 8,
-        },
-        {
-          type: '',
-          content: 'Игорь С.',
-          status: 'checkedOut',
-          month: 9,
-          room: 321,
-        },
-      ];
-      break;
-    case 11:
-      listData = [
-        {
-          type: '',
-          content: 'Александр П.',
-          status: 'dueIn',
-          month: 8,
-        },
-      ];
-      break;
-    default:
+          content: data[i]?.lastName + ' ' + data[i]?.firstName + ' ' + data[i]?.fatherName,
+          status: getStatus(dayjs(data[i]?.departureDate), 'depart'),
+          month: dayjs(data[i]?.departureDate).month() + 1,
+          room: data[i]?.numberRoom,
+        });
+      }
+    }
   }
   return listData || [];
 };
 
-const CalendarComp = () => {
+const getInfoUser = (content, data) => {
+  let indexGuest = 0;
+  for (let i = 0; i < data.length; i++) {
+    if (content === data[i]?.lastName + ' ' + data[i]?.firstName + ' ' + data[i]?.fatherName) {
+      indexGuest = i;
+    }
+  }
+  return (
+    <div>
+      <p>Фио: {content}</p>
+      <p>Дата прибытия: {dayjs(data[indexGuest]?.arrivalDate).format('DD.MM.YYYY')}</p>
+      <p>Дата отбытия: {dayjs(data[indexGuest]?.departureDate).format('DD.MM.YYYY')}</p>
+      <p>Номер комнаты: {data[indexGuest]?.numberRoom}</p>
+      <p>Этаж комнаты: {data[indexGuest]?.roomFloor}</p>
+      <p>Номер телефона: {data[indexGuest]?.phoneNumber}</p>
+      <p>Количество взрослых: {data[indexGuest]?.countAdults}</p>
+      <p>Количество детей: {data[indexGuest]?.countChildren}</p>
+    </div>
+  );
+};
+
+const CalendarComp = ({ guests }) => {
   const getColor = (status) => {
     if (status === 'checkedOut') {
       return {
@@ -131,14 +149,20 @@ const CalendarComp = () => {
   };
 
   const dateCellRender = (value, month) => {
-    const listData = getListData(value);
+    const listData = getListData(value, guests);
     return (
       <ul className="events">
-        {listData.map((item) => {
+        {listData.map((item, key) => {
           if (item.month === month) {
             return (
-              <li key={item.content}>
-                <Badge style={getColor(item.status)} status={item.type} text={item.room + ': '+item.content} />
+              <li key={key}>
+                <Tooltip title={getInfoUser(item.content, guests)} arrow={false} placement="left">
+                  <Badge
+                    style={getColor(item.status)}
+                    status={item.type}
+                    text={item.room + ': ' + item.content}
+                  />
+                </Tooltip>
               </li>
             );
           }

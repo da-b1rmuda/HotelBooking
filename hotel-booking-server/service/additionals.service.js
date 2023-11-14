@@ -165,6 +165,22 @@ class AdditionalsService {
       id_cancellation_policy,
     ]);
   }
+
+  //
+  // Status guest room
+  //
+  async getStatusGuestRoom() {
+    const response = await client.query(`select * from public.statusguestroom`);
+    return response;
+  }
+
+  //
+  // Status guest
+  //
+  async getStatusGuest() {
+    const response = await client.query(`select * from public.statusguest`);
+    return response;
+  }
 }
 
 export default AdditionalsService;

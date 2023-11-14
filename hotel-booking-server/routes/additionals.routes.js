@@ -29,4 +29,7 @@ additionalsRouter.post('/createCancelPolicy', additionalsController.CreateCancel
 additionalsRouter.put('/editCancelPolicy', additionalsController.EditCancelPolicy);
 additionalsRouter.delete('/deleteCancelPolicy/:id', additionalsController.DeleteCancelPolicy);
 
+additionalsRouter.get('/getStatusGuest', additionalsController.GetStatusGuest);
+additionalsRouter.get('/getStatusGuestRoom', additionalsController.GetStatusGuestRoom);
+
 export default additionalsRouter;

@@ -8,6 +8,8 @@ const roomSlice = createSlice({
     typeRoom: [],
     statusDeal: [],
     cancelPolicy: [],
+    statusGuest: [],
+    statusGuestRoom: [],
     isLoading: false,
     error: '',
     success: '',
@@ -77,6 +79,32 @@ const roomSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+
+    statusGuestGet(state) {
+      state.isLoading = true;
+    },
+    statusGuestGetSuccess(state, action) {
+      state.isLoading = false;
+      state.statusGuest = action.payload.data;
+      state.success = action.payload.successLoad;
+    },
+    statusGuestGetError(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+
+    statusGuestRoomGet(state) {
+      state.isLoading = true;
+    },
+    statusGuestRoomGetSuccess(state, action) {
+      state.isLoading = false;
+      state.statusGuestRoom = action.payload.data;
+      state.success = action.payload.successLoad;
+    },
+    statusGuestRoomGetError(state, action) {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -97,4 +125,10 @@ export const {
   cancelPolicyGet,
   cancelPolicyGetError,
   cancelPolicyGetSuccess,
+  statusGuestGet,
+  statusGuestGetSuccess,
+  statusGuestGetError,
+  statusGuestRoomGet,
+  statusGuestRoomGetError,
+  statusGuestRoomGetSuccess,
 } = roomSlice.actions;

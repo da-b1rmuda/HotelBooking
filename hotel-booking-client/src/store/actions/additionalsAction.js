@@ -15,6 +15,12 @@ import {
   cancelPolicyGet,
   cancelPolicyGetError,
   cancelPolicyGetSuccess,
+  statusGuestGet,
+  statusGuestGetSuccess,
+  statusGuestGetError,
+  statusGuestRoomGet,
+  statusGuestRoomGetError,
+  statusGuestRoomGetSuccess,
 } from '../reducers/additionalsReducer';
 
 export const getStatusAction = () => async (dispatch) => {
@@ -64,5 +70,28 @@ export const getCancelPolicyAction = () => async (dispatch) => {
     );
   } catch (e) {
     dispatch(cancelPolicyGetError(e.response?.data.message));
+  }
+};
+
+export const getStatusGuestAction = () => async (dispatch) => {
+  try {
+    dispatch(statusGuestGet());
+    let response = await AdditionalsService.getStatusGuest();
+    dispatch(
+      statusGuestGetSuccess({ successLoad: 'Данные успешно загружены', data: response.data }),
+    );
+  } catch (e) {
+    dispatch(statusGuestGetError(e.response?.data.message));
+  }
+};
+export const getStatusGuestRoomAction = () => async (dispatch) => {
+  try {
+    dispatch(statusGuestRoomGet());
+    let response = await AdditionalsService.getStatusGuestRoom();
+    dispatch(
+      statusGuestRoomGetSuccess({ successLoad: 'Данные успешно загружены', data: response.data }),
+    );
+  } catch (e) {
+    dispatch(statusGuestRoomGetError(e.response?.data.message));
   }
 };

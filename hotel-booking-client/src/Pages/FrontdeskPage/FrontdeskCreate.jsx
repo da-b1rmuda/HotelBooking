@@ -21,8 +21,6 @@ const FrontdeskCreate = (props) => {
   const { rate, isLoading: rateLoading } = useSelector((state) => state.rateStore);
   const { statusRoom, typeRoom } = useSelector((state) => state.additionalsStore);
 
-  console.log(typeRoom);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(roomGetAction());
@@ -76,16 +74,18 @@ const FrontdeskCreate = (props) => {
   };
 
   const [dataBooking, setDataBooking] = useState({
-    room_type: 'Одиночная',
+    room_type: '',
     arrival_date: '',
     departure_date: '',
-    count_adults: 0,
+    count_adults: 1,
     count_children: 0,
     firstName: '',
     lastName: '',
     surname: '',
     number: '',
     email: '',
+    id_room: '',
+    amount_paid: null,
     rate: null,
   });
 
@@ -146,8 +146,8 @@ const FrontdeskCreate = (props) => {
           {current === 2 && (
             <StepThird
               dataBooking={dataBooking}
-              setDataBooking={setDataBooking}
               onChangeStep={onChangeStep}
+              setOnCreateBooking={props.setOnCreateBooking}
             />
           )}
         </>

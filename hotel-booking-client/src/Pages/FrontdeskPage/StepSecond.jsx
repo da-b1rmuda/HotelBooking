@@ -13,7 +13,14 @@ const StepSecond = ({ dataBooking, setDataBooking, onChangeStep, selectedRoom, f
 
   const [form] = Form.useForm();
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    setDataBooking({
+      ...dataBooking,
+      firstName: values.name,
+      lastName: values.surname,
+      surname: values.fathername,
+      email: values.email,
+      number: values.phone,
+    });
     onChangeStep(2);
   };
   const handleClick = () => {

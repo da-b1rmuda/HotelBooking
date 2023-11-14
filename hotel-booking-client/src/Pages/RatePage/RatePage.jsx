@@ -113,6 +113,22 @@ const RatePage = () => {
   // #endregion
 
   const [selectedRow, setSelectedRow] = useState();
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userInfo'));
+    if (userData.role === 'admin') {
+      setItems([
+        {
+          label: 'Редактировать',
+          key: 'edit',
+        },
+        {
+          label: 'Удалить',
+          key: 'delete',
+        },
+      ]);
+    }
+  }, []);
   const columns = [
     {
       title: 'Тип комнаты',
@@ -168,23 +184,25 @@ const RatePage = () => {
       // onFilter: (value, record) => record.status.includes(value),
       // filterIcon: <svg width={1} height={1}></svg>,
     },
-    {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="large">
-          <Dropdown menu={{ items, onClick, record }} trigger={['click']}>
-            <Space>
-              <Button
-                onClick={() => setSelectedRow(record.id_rate)}
-                shape="circle"
-                icon={<MoreOutlined />}
-              />
+    items.length > 0
+      ? {
+          title: '',
+          key: 'action',
+          render: (_, record) => (
+            <Space size="large">
+              <Dropdown menu={{ items, onClick, record }} trigger={['click']}>
+                <Space>
+                  <Button
+                    onClick={() => setSelectedRow(record.id_rate)}
+                    shape="circle"
+                    icon={<MoreOutlined />}
+                  />
+                </Space>
+              </Dropdown>
             </Space>
-          </Dropdown>
-        </Space>
-      ),
-    },
+          ),
+        }
+      : {},
   ];
   const getColorAvailable = (available) => {
     let color;
@@ -266,16 +284,6 @@ const RatePage = () => {
   // #endregion
 
   // #region Dropdown menu
-  const items = [
-    {
-      label: 'Редактировать',
-      key: 'edit',
-    },
-    {
-      label: 'Удалить',
-      key: 'delete',
-    },
-  ];
   const onClick = ({ key }) => {
     if (key === 'delete') {
       showDeleteConfirm();
@@ -323,13 +331,12 @@ const RatePage = () => {
             </div>
             <div className="d-f ai-c">
               <div className="m-r-2">
-                <Button type={'primary'} size={'large'} onClick={() => setOnCreateRate(false)}>
-                  Добавить расценку
-                </Button>
+                {items.length > 0 ? (
+                  <Button type={'primary'} size={'large'} onClick={() => setOnCreateRate(false)}>
+                    Добавить расценку
+                  </Button>
+                ) : null}
               </div>
-              <Button size={'large'} icon={<FilterOutlined />}>
-                Фильтр
-              </Button>
             </div>
           </div>
         </>

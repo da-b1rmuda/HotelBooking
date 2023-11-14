@@ -103,7 +103,11 @@
 }
 
 .form-card-step-two label {
-  font-size: 2vh!important;
+  font-size: 2vh !important;
   padding-bottom: 0;
   margin-bottom: 0;
+}
+
+.ai-e {
+  align-items: flex-end;
 }

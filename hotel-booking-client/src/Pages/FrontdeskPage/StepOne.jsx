@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { isEmpty, getColorTag } from '../../services/functionService';
+import { isEmpty, getColorTag, getConvertedDate } from '../../services/functionService';
 import { PlusOutlined, MinusOutlined, MoreOutlined } from '@ant-design/icons';
 import { Button, Card, Radio, DatePicker, Table, Tag, Space, Dropdown, message } from 'antd';
 import SelectRateModal from './SelectRateModal';
+import dayjs from 'dayjs';
 
 const maxPeopleInRoom = 6;
 
@@ -27,17 +28,13 @@ const StepOne = ({
 
   const [isAvaliabilityChecked, setIsAvaliabilityChecked] = useState(false);
   const checkAvailabilityRoom = () => {
-    setFilteredInfo({
-      status: ['Доступно'],
-      room_type: [dataBooking.room_type],
-    });
-    console.log(dataBooking.room_type);
-    console.log(dataBooking.arrival_date);
-    console.log(dataBooking.departure_date);
-    console.log(dataBooking.count_adults);
-    console.log(dataBooking.count_adults < 1 ? 0 : dataBooking.count_children);
-
-    setIsAvaliabilityChecked(true);
+    if (dataBooking.room_type && dataBooking.departure_date && dataBooking.arrival_date) {
+      setFilteredInfo({
+        status: ['Доступно'],
+        room_type: [dataBooking.room_type],
+      });
+      setIsAvaliabilityChecked(true);
+    }
   };
 
   const [filteredInfo, setFilteredInfo] = useState({});
@@ -81,7 +78,7 @@ const StepOne = ({
       setAddButtonActive(true);
     }
     if (value === 'adult') {
-      if (dataBooking.count_adults > 0) {
+      if (dataBooking.count_adults > 1) {
         setDataBooking({ ...dataBooking, count_adults: dataBooking.count_adults - 1 });
       }
     } else {
@@ -92,7 +89,7 @@ const StepOne = ({
   };
   // Date picker
   const onOk = (value) => {
-    console.log('onOk: ', value);
+    
   };
   const columns = [
     {
@@ -177,6 +174,7 @@ const StepOne = ({
     if (key === 'choise') {
       if (isAvaliabilityChecked === true) {
         setIsModalOpen(true);
+        setDataBooking({ ...dataBooking, id_room: selectedRoom });
       } else {
         messageApi.open({
           type: 'error',

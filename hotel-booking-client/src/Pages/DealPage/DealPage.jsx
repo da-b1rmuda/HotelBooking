@@ -100,6 +100,33 @@ const DealPage = () => {
   // Initial column
   //
   const [selectedRow, setSelectedRow] = useState();
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userInfo'));
+    if (userData.role === 'admin') {
+      setItems([
+        {
+          label: 'Информация',
+          key: 'info',
+        },
+        {
+          label: 'Редактировать',
+          key: 'edit',
+        },
+        {
+          label: 'Удалить',
+          key: 'delete',
+        },
+      ]);
+    } else {
+      setItems([
+        {
+          label: 'Информация',
+          key: 'info',
+        },
+      ]);
+    }
+  }, []);
   const columns = [
     {
       title: '№ Акции',
@@ -236,20 +263,6 @@ const DealPage = () => {
   //
   // Dropdown menu
   //
-  const items = [
-    {
-      label: 'Информация',
-      key: 'info',
-    },
-    {
-      label: 'Редактировать',
-      key: 'edit',
-    },
-    {
-      label: 'Удалить',
-      key: 'delete',
-    },
-  ];
   const onClick = ({ key }) => {
     if (key === 'delete') {
       showDeleteConfirm();
@@ -366,9 +379,11 @@ const DealPage = () => {
                   }}
                 />
               </div>
-              <Button type={'primary'} size={'large'} onClick={() => setOnCreateDeal(false)}>
-                Добавить акцию
-              </Button>
+              {items.length > 1 ? (
+                <Button type={'primary'} size={'large'} onClick={() => setOnCreateDeal(false)}>
+                  Добавить акцию
+                </Button>
+              ) : null}
             </div>
           </div>
         </>

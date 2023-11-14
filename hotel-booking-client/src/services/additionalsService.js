@@ -19,4 +19,10 @@ export default class AdditionalsService {
   static async getCancelPolicy() {
     return await $api.get('/additionals/getCancelPolicy');
   }
+  static async getStatusGuest() {
+    return await $api.get('/additionals/getStatusGuest');
+  }
+  static async getStatusGuestRoom() {
+    return await $api.get('/additionals/getStatusGuestRoom');
+  }
 }

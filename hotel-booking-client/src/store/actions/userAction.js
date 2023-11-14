@@ -53,7 +53,7 @@ export const userEditAction = (id_user, login, email, password, role) => async (
 export const userGetAction = () => async (dispatch) => {
   try {
     dispatch(userGet());
-    let response = await UserService.getUser();
+    let response = await UserService.getUsers();
     dispatch(userGetSuccess({ data: response.data }));
   } catch (e) {
     dispatch(userGetError(e.response?.data.message));

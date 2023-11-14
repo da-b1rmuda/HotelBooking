@@ -202,6 +202,24 @@ class AdditionalsController {
       next(e);
     }
   }
+
+  async GetStatusGuestRoom(req, res, next) {
+    try {
+      const response = await additionalsService.getStatusGuestRoom();
+      return res.json(response.rows);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async GetStatusGuest(req, res, next) {
+    try {
+      const response = await additionalsService.getStatusGuest();
+      return res.json(response.rows);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default AdditionalsController;

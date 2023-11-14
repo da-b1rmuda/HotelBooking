@@ -4,6 +4,7 @@ import additionalsReducer from './reducers/additionalsReducer';
 import dealReducer from './reducers/dealReducer';
 import rateReducer from './reducers/rateReducer';
 import userReducer from './reducers/userReducer';
+import bookingReducer from './reducers/bookingReducer';
 
 const rootReducer = combineReducers({
   roomStore: roomReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   dealStore: dealReducer,
   rateStore: rateReducer,
   userStore: userReducer,
+  bookingStore: bookingReducer,
 });
 
 export const store = configureStore({

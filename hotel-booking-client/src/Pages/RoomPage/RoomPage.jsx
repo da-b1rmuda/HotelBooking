@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Radio, Button, Space, Table, Tag, message, Dropdown, Modal } from 'antd';
-import { MoreOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { Radio, Button, Space, Table, Tag, message, Dropdown, Modal, Input } from 'antd';
+import { MoreOutlined, ExclamationCircleFilled, SearchOutlined } from '@ant-design/icons';
 import { isEmpty, getColorTag } from '../../services/functionService';
 import './Room.css';
 import RoomCreate from './RoomCreate';
@@ -106,6 +106,8 @@ const Room = () => {
   const [selectedRow, setSelectedRow] = useState();
   const [filteredInfo, setFilteredInfo] = useState({});
   const [sortedInfo, setSortedInfo] = useState({});
+  //serach
+  const [searchText, setSearchText] = useState('');
   const loadFilter = () => {
     let tempFilter = [];
     // eslint-disable-next-line
@@ -114,6 +116,23 @@ const Room = () => {
     });
     return tempFilter;
   };
+
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userInfo'));
+    if (userData.role === 'admin') {
+      setItems([
+        {
+          label: 'Редактировать',
+          key: 'edit',
+        },
+        {
+          label: 'Удалить',
+          key: 'delete',
+        },
+      ]);
+    }
+  }, []);
   const columns = [
     {
       title: '№ Комнаты',
@@ -147,6 +166,12 @@ const Room = () => {
           })}
         </>
       ),
+      filteredValue: [searchText],
+      onFilter: (value, record) =>
+        String(record.floor).toLowerCase().includes(value.toLowerCase()) ||
+        String(record.room_type).toLowerCase().includes(value.toLowerCase()) ||
+        String(record.number_room).toLowerCase().includes(value.toLowerCase()) ||
+        String(record.status).toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: 'Статус',
@@ -160,23 +185,25 @@ const Room = () => {
       onFilter: (value, record) => record.status.includes(value),
       filterIcon: <svg width={1} height={1}></svg>,
     },
-    {
-      title: '',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="large">
-          <Dropdown menu={{ items, onClick, record }} trigger={['click']}>
-            <Space>
-              <Button
-                onClick={() => setSelectedRow(record.key)}
-                shape="circle"
-                icon={<MoreOutlined />}
-              />
+    items.length > 0
+      ? {
+          title: '',
+          key: 'action',
+          render: (_, record) => (
+            <Space size="large">
+              <Dropdown menu={{ items, onClick, record }} trigger={['click']}>
+                <Space>
+                  <Button
+                    onClick={() => setSelectedRow(record.key)}
+                    shape="circle"
+                    icon={<MoreOutlined />}
+                  />
+                </Space>
+              </Dropdown>
             </Space>
-          </Dropdown>
-        </Space>
-      ),
-    },
+          ),
+        }
+      : {},
   ];
 
   //
@@ -230,19 +257,7 @@ const Room = () => {
     />
   );
 
-  //
   // Dropdown menu
-  //
-  const items = [
-    {
-      label: 'Редактировать',
-      key: 'edit',
-    },
-    {
-      label: 'Удалить',
-      key: 'delete',
-    },
-  ];
   const onClick = ({ key }) => {
     if (key === 'delete') {
       showDeleteConfirm();
@@ -288,9 +303,25 @@ const Room = () => {
                 Занятые комнаты {'(' + unavailableDateRoomsCount + ')'}
               </Radio.Button>
             </Radio.Group>
-            <Button size="large" type="primary" onClick={() => setOnCreateRoom(false)}>
-              Добавить комнату
-            </Button>
+            <div>
+              <Input
+                size={'large'}
+                style={{ width: '16vw' }}
+                placeholder="Поиск..."
+                prefix={<SearchOutlined />}
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              {items.length > 0 ? (
+                <Button
+                  size="large"
+                  type="primary"
+                  style={{ marginLeft: '2vh' }}
+                  onClick={() => setOnCreateRoom(false)}>
+                  Добавить комнату
+                </Button>
+              ) : null}
+            </div>
           </div>
         </>
       ) : null}

@@ -21,7 +21,6 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    console.log(userInfo)
     if (!isAuth) return;
     if (rememberUser) {
       localStorage.setItem('userInfo', JSON.stringify(userInfo[0]));
@@ -33,34 +32,8 @@ const LoginPage = () => {
     navigation('/overview');
   }, [isAuth]);
 
-  // const checkRemember = (remember) => {
-  //   if (isAuth) {
-  //     console.log(userInfo[0]);
-  //     if (remember) {
-  //       localStorage.setItem('userInfo', userInfo[0]);
-  //       sessionStorage.removeItem('userInfo');
-  //     } else {
-  //       sessionStorage.setItem('userInfo', userInfo[0]);
-  //       localStorage.removeItem('userInfo');
-  //     }
-  //     navigation('/');
-  //   }
-  // };
-
-  //
-  // Notification
-  //
+ 
   const [messageApi, contextHolder] = message.useMessage();
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     if (rememberMe) {
-  //       console.log('localstorage');
-  //     } else {
-  //       console.log('seessionStorage');
-  //     }
-  //     // navigation('/');
-  //   }
-  // }, [isAuth, rememberMe]);
 
   useEffect(() => {
     if (!isEmpty(success)) {
