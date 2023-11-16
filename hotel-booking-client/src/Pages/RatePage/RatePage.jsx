@@ -15,6 +15,7 @@ import RateCreate from './RateCreate';
 import { roomGetAction } from '../../store/actions/roomAction';
 
 const RatePage = () => {
+
   // #region Load data
   const {
     rate,

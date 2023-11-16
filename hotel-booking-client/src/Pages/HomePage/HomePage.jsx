@@ -237,7 +237,7 @@ const HomePage = () => {
                   </Avatar>
                 </Dropdown>
               </div>
-            </Header>
+            </Header> 
 
             <Content style={{ margin: '16px' }}>
               <div

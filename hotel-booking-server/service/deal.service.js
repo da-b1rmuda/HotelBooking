@@ -70,20 +70,6 @@ class DealService {
     description,
     id_deal,
   ) {
-    let hasAlreadyFieldName = await client.query(
-      `select deal_name from public.deal where deal_name = $1`,
-      [deal_name],
-    );
-    if (hasAlreadyFieldName.rows[0] !== null && hasAlreadyFieldName.rows[0] !== undefined) {
-      throw ApiError.BadRequest('Акция с данным названием уже существует');
-    }
-    let hasAlreadyFieldNumber = await client.query(
-      `select deal_number from public.deal where deal_number = $1`,
-      [deal_number],
-    );
-    if (hasAlreadyFieldNumber.rows[0] !== null && hasAlreadyFieldNumber.rows[0] !== undefined) {
-      throw ApiError.BadRequest('Акция с данным номером уже существует');
-    }
 
     await client.query(
       `update public.deal set deal_number = $1, deal_name = $2, discount = $3, start_date = $4, 
