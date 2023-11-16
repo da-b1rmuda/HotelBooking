@@ -12,8 +12,11 @@ import HomePage from './../Pages/Home/HomePage'
 export const routes = createBrowserRouter([
 	{
 		path: '/',
-		element: <HomePage />,
 		children: [
+			{
+				path: '',
+				element: <HomePage />,
+			},
 			{
 				path: 'overview',
 				element: <OverviewPage />
