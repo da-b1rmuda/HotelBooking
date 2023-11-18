@@ -50,7 +50,7 @@ app.use('/deal', dealRouter);
 app.use('/rate', rateRouter);
 app.use('/user', userRouter);
 app.use('/booking', bookingRouter);
-app.use('/querys', querysRouter)
+app.use('/querys', querysRouter);
 
 app.use(errorMiddleware);
 

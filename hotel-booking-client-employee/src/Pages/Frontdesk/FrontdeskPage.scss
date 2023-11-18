@@ -1,0 +1,113 @@
+.headerFrontdesk {
+	display: flex;
+	justify-content: space-between;
+}
+
+.p-t-3 {
+	padding-top: 3vh;
+}
+
+.flex-center {
+	align-items: center;
+}
+
+.p-r-2 {
+	padding-right: 2vh;
+}
+
+.text-fontdesk p {
+	color: #383e49;
+	font-size: 2vh;
+}
+.text-fontdesk span {
+	color: #5d6679;
+}
+.counter-fontdesk span {
+	color: white;
+}
+.counter-fontdesk p {
+	font-size: 3vh;
+	padding-left: 1vh;
+	padding-right: 1vh;
+}
+.counter-fontdesk {
+	padding-left: 5vh;
+	justify-content: center;
+	align-items: center;
+}
+
+.ant-card-body {
+	padding-top: 10px !important;
+}
+
+.offChild {
+	color: #d8d8d8 !important;
+}
+
+.inputs_fd span {
+	color: #5d6679;
+	font-size: 2vh;
+}
+
+.w50p div {
+	width: 50%;
+}
+
+.g3 {
+	gap: 3vh;
+}
+
+.card-rate {
+	margin-bottom: 2vh;
+}
+
+.card-rate p:not(:first-child) {
+	margin-top: 1vh;
+}
+
+.card-price {
+	margin-top: 1vh;
+}
+
+.card-rate p {
+	color: #5d6679;
+	padding-right: 1vh;
+}
+
+.card-button {
+	margin-top: 1vh;
+	display: flex;
+	justify-content: end;
+}
+
+.desc-block p:first-child {
+	color: #949494;
+}
+
+.desc-block p {
+	font-size: 2vh;
+}
+
+.desc-block {
+	margin-bottom: 1vh;
+}
+
+.ant-edit-height {
+	height: 100%;
+}
+
+.title-card-step-two {
+	color: #4e4e4e;
+	font-size: 2.5vh;
+	padding-bottom: 1vh;
+}
+
+.form-card-step-two label {
+	font-size: 2vh !important;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
+
+.ai-e {
+	align-items: flex-end;
+}

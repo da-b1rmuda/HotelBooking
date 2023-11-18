@@ -8,35 +8,63 @@ import RatePage from '../Pages/Rate/RatePage'
 import LoginPage from '../Pages/Login/LoginPage'
 import RegistrationPage from './../Pages/Registration/RegistrationPage'
 import HomePage from './../Pages/Home/HomePage'
+import LayoutApp from '../Layout/Layout'
 
 export const routes = createBrowserRouter([
 	{
 		path: '/',
-		element: <HomePage />,
 		children: [
 			{
+				path: '',
+				element: <HomePage />
+			},
+			{
 				path: 'overview',
-				element: <OverviewPage />
+				element: (
+					<LayoutApp>
+						<OverviewPage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'frontdesk',
-				element: <FrontdeskPage />
+				element: (
+					<LayoutApp>
+						<FrontdeskPage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'guest',
-				element: <GuestPage />
+				element: (
+					<LayoutApp>
+						<GuestPage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'room',
-				element: <RoomPage />
+				element: (
+					<LayoutApp>
+						<RoomPage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'deal',
-				element: <DealPage />
+				element: (
+					<LayoutApp>
+						<DealPage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'rate',
-				element: <RatePage />
+				element: (
+					<LayoutApp>
+						<RatePage />
+					</LayoutApp>
+				)
 			},
 			{
 				path: 'login',

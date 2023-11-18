@@ -7,6 +7,7 @@ import locale from 'antd/locale/ru_RU'
 import 'dayjs/locale/ru'
 
 export default function WrapperLayout() {
+	const [themeMenu, setThemeMenu] = React.useState('light')
 	return (
 		<ConfigProvider locale={locale}>
 			<ContextBooking.Provider

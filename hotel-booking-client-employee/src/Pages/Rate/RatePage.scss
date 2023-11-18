@@ -1,0 +1,26 @@
+.jc-e {
+  justify-content: end;
+}
+
+.jc-sa {
+  justify-content: space-around;
+}
+
+.ai-c{
+  align-items: center;
+}
+
+.img-card {
+  padding: 3vh;
+  filter: invert(55%) sepia(7%) saturate(305%) hue-rotate(196deg) brightness(90%) contrast(94%);
+}
+
+.clue-rate{
+  padding: 2vh;
+  background-color: rgba(236, 236, 236, 0.479);
+  border-radius: 1vh;
+}
+
+.clue-rate-container p{
+  color: rgb(206, 206, 206);
+}

@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import './Layout.scss'
 
@@ -40,7 +39,7 @@ import { rateGetAction } from '../store/actions/rateAction'
 const { Header, Content, Footer, Sider } = Layout
 const { useToken } = theme
 
-export default function LayoutApp() {
+export default function LayoutApp({ children }) {
 	const {
 		token: { colorBgContainer }
 	} = theme.useToken()
@@ -120,7 +119,7 @@ export default function LayoutApp() {
 		getItem('Обзор', 'overview', <HomeOutlined />),
 		getItem('Оформление', 'frontdesk', <EditOutlined />),
 		getItem('Гости', 'guest', <AuditOutlined />),
-		getItem('Комнаты', 'rooms', <AppstoreOutlined />),
+		getItem('Комнаты', 'room', <AppstoreOutlined />),
 		getItem('Акции', 'deal', <FireOutlined />),
 		getItem('Расценки', 'rate', <DollarOutlined />)
 		// getItem('Дополнительно', 'advanced', <ControlOutlined />),
@@ -165,18 +164,27 @@ export default function LayoutApp() {
 	}
 	return (
 		<Layout className='min-vh-100'>
-			<Sider collapsed={collapsed}>
-				<div className='d-flex align-items-start justify-content-center'>
-					<img src='/image/logo.png' alt='logo' style={{ width: '7vh' }} />
+			<Sider style={{ background: themeMenu === 'light' ? 'white' : '' }} collapsed={collapsed}>
+				<div className='d-flex align-items-center justify-content-center'>
+					<img src='/image/logo.svg' alt='logo' style={{ width: '5vh' }} />
 					<div className='loginPage__logo' style={collapsed ? { display: 'none' } : { display: 'block' }}>
-						<p style={{ fontSize: '3.5vh' }}>BHotel</p>
+						<p style={{ fontSize: '3vh' }}>BookRoom</p>
 					</div>
 				</div>
-				<Menu onClick={onMenuItemClick} defaultSelectedKeys={['overview']} mode='inline' items={items} />
+				<Menu
+					onClick={onMenuItemClick}
+					defaultSelectedKeys={['overview']}
+					mode='inline'
+					items={items}
+					theme={themeMenu}
+				/>
 			</Sider>
 			<Layout>
 				<Header className='p-0' style={{ background: colorBgContainer }}>
-					<div className='d-flex align-items-start justify-content-center' style={{ padding: '0 2vh 0 0' }}>
+					<div
+						className='d-flex align-items-center justify-content-between'
+						style={{ padding: '0 2vh 0 0', height: '100%' }}
+					>
 						<Button type='primary' onClick={toggleCollapsed} style={{ marginLeft: 16 }}>
 							{collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
 						</Button>
@@ -223,7 +231,7 @@ export default function LayoutApp() {
 							background: colorBgContainer
 						}}
 					>
-						<Outlet />
+						{children}
 					</div>
 				</Content>
 				<Footer style={{ textAlign: 'center' }}>ДИТИ НИЯУ МИФИ ©2023 Сделано Мясниковым Денисом</Footer>
