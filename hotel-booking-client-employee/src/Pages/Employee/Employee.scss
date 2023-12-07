@@ -1,0 +1,152 @@
+.addEmployee-card {
+}
+
+.schedule_choice_employee {
+	width: 40%;
+}
+
+.schedule_employee_info {
+	padding-right: 2vh;
+	p {
+		color: gray;
+	}
+}
+
+.schedule_weekday_card {
+	display: flex;
+	flex-grow: 1;
+	justify-content: space-between;
+	div {
+		width: 13%;
+		border: 2px solid rgb(235, 235, 235);
+		border-radius: 1vh;
+		height: 15vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+	}
+
+	div:hover p {
+		color: #3b92ff;
+	}
+
+	div p {
+		margin-bottom: 0;
+		font-size: 3vh;
+	}
+}
+
+.schedule_weekday_card_selected {
+	background-color: #3b92ff;
+	&:hover p {
+		color: #fff !important;
+	}
+	p {
+		color: #fff;
+	}
+}
+
+.upload-user-avatar {
+	border: 1px dashed gray;
+	width: 200px;
+	height: 200px;
+}
+
+.block-chart-task {
+	display: flex;
+	width: 100%;
+	gap: 5vh;
+	.block-chart-task-container {
+		cursor: pointer;
+		width: 33%;
+		flex-grow: 1;
+		border-radius: 1vh;
+		border: 1px solid rgb(235, 235, 235);
+		padding: 0 0 0 1vh;
+		margin-top: 1vh;
+		transition: all 0.4s;
+
+		.block-chart-task-bg {
+			padding: 1vh;
+			border-top-right-radius: 0.7vh;
+			border-bottom-right-radius: 0.7vh;
+			background-color: #fff;
+		}
+
+		&:hover {
+			transform: translateZ(0) scale(1.05);
+			backface-visibility: hidden;
+		}
+	}
+}
+
+.list-view {
+	opacity: 0;
+	overflow: hidden;
+	animation: list-view 1s forwards;
+}
+
+@keyframes list-view {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.complaint-modal__guest {
+	display: flex;
+	justify-content: space-between;
+	// div {
+
+	// 	align-items: center;
+	// 	p {
+	// 		padding-left: 1vh;
+	// 		margin-bottom: 0;
+	// 	}
+	// }
+}
+
+.complaint-modal__guest-info {
+	div {
+		display: flex;
+		p {
+			color: gray;
+			padding-right: 1vh;
+			padding-left: 5.5vh;
+		}
+	}
+}
+
+.cleaner-list-task {
+	p,
+	h4 {
+		margin: 0 !important;
+		color: #b4b4b4;
+	}
+
+	.ant-list-item-meta {
+		align-items: center !important;
+	}
+	.ant-list-item-action {
+		p {
+			margin: 0;
+		}
+		display: flex;
+		align-items: center;
+	}
+
+	.ant-list-item-extra {
+		display: flex;
+		align-items: center;
+		gap: 2vh;
+	}
+}
+
+.list-employee-complete {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+}

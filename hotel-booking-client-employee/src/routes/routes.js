@@ -9,6 +9,9 @@ import LoginPage from '../Pages/Login/LoginPage'
 import RegistrationPage from './../Pages/Registration/RegistrationPage'
 import HomePage from './../Pages/Home/HomePage'
 import LayoutApp from '../Layout/Layout'
+import AllEmployee from '../Pages/Employee/AllEmployee'
+import TaskEmployee from '../Pages/Employee/TaskEmployee/TaskEmployee'
+import SсheduleEmployee from '../Pages/Employee/SсheduleEmployee'
 
 export const routes = createBrowserRouter([
 	{
@@ -63,6 +66,30 @@ export const routes = createBrowserRouter([
 				element: (
 					<LayoutApp>
 						<RatePage />
+					</LayoutApp>
+				)
+			},
+			{
+				path: 'allEmployee',
+				element: (
+					<LayoutApp>
+						<AllEmployee />
+					</LayoutApp>
+				)
+			},
+			{
+				path: 'sсheduleEmployee',
+				element: (
+					<LayoutApp>
+						<SсheduleEmployee />
+					</LayoutApp>
+				)
+			},
+			{
+				path: 'taskEmployee',
+				element: (
+					<LayoutApp>
+						<TaskEmployee />
 					</LayoutApp>
 				)
 			},

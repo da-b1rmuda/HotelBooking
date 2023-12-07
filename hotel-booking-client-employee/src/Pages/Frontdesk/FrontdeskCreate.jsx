@@ -14,24 +14,46 @@ import { rateGetAction } from '../../store/actions/rateAction'
 dayjs.extend(customParseFormat)
 
 const FrontdeskCreate = (props) => {
-	//
-	// Load data
-	//
+	// #region Вспомогательные переменные
+	const dispatch = useDispatch()
+	const [data, setData] = useState([])
+	const [dataBooking, setDataBooking] = useState({
+		room_type: '',
+		arrival_date: '',
+		departure_date: '',
+		count_adults: 1,
+		count_children: 0,
+		firstName: '',
+		lastName: '',
+		surname: '',
+		number: '',
+		email: '',
+		id_room: '',
+		amount_paid: null,
+		rate: null,
+		id_rate: ''
+	})
+	// #endregion
+
+	// #region Redux
 	const { room, isLoading: roomLoading } = useSelector((state) => state.roomStore)
 	const { rate, isLoading: rateLoading } = useSelector((state) => state.rateStore)
+	const { guests, isLoading: guestsLoading } = useSelector((state) => state.bookingStore)
 	const { statusRoom, typeRoom } = useSelector((state) => state.additionalsStore)
+	// #endregion
 
-	const dispatch = useDispatch()
+	// #region UseEffect
 	useEffect(() => {
 		dispatch(roomGetAction())
 		dispatch(rateGetAction())
-		// eslint-disable-next-line
 	}, [])
+
 	useEffect(() => {
 		loadData()
-		// eslint-disable-next-line
 	}, [room])
-	const [data, setData] = useState([])
+	// #endregion
+
+	// #region Функция
 	const loadData = () => {
 		let tempData = []
 		if (room.length !== 0) {
@@ -50,21 +72,16 @@ const FrontdeskCreate = (props) => {
 		}
 	}
 
-	//
-	// Back button
-	//
 	const onBackButton = () => {
 		props.setOnCreateBooking(false)
 	}
 
-	//Tabs
 	const [current, setCurrent] = useState(0)
 	const onChangeStep = (value) => {
 		setCurrent(value)
 	}
 
 	const [selectedRow, setSelectedRow] = useState()
-
 	const selectedRoom = () => {
 		for (let i = 0; i < room.length; i++) {
 			if (room[i].id_room === selectedRow) {
@@ -72,22 +89,7 @@ const FrontdeskCreate = (props) => {
 			}
 		}
 	}
-
-	const [dataBooking, setDataBooking] = useState({
-		room_type: '',
-		arrival_date: '',
-		departure_date: '',
-		count_adults: 1,
-		count_children: 0,
-		firstName: '',
-		lastName: '',
-		surname: '',
-		number: '',
-		email: '',
-		id_room: '',
-		amount_paid: null,
-		rate: null
-	})
+	// #endregion
 
 	return (
 		<>
@@ -130,6 +132,7 @@ const FrontdeskCreate = (props) => {
 							onChangeStep={onChangeStep}
 							statusRoom={statusRoom}
 							typeRoom={typeRoom}
+							guests={guests}
 							rate={rate}
 							data={data}
 							setSelectedRow={setSelectedRow}

@@ -7,6 +7,7 @@ import './css/bootstrap-grid.css'
 import './css/bootstrap-reboot.css'
 import './css/bootstrap-utilities.css'
 import './css/bootstrap.css'
+import './css/fonts.scss'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<Provider store={store}>

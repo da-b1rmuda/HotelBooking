@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from 'react'
-import { Divider, Button, Space, Table, Tag, message } from 'antd'
+import { Divider, Button, Space, Tag, message } from 'antd'
 import './FrontdeskPage.scss'
 import CalendarComp from '../../components/Calendar/Calendar'
 import FrontdeskCreate from './FrontdeskCreate'
 import { useDispatch, useSelector } from 'react-redux'
-import { isEmpty } from '../../services/functionService'
 import { guestsGetAction, resetMessagesAction } from '../../store/actions/bookingAction'
 import Loading from '../../components/Loading/Loading'
 
 const FrontdeskPage = () => {
+	// #region Вспомогательные переменные
+	const dispatch = useDispatch()
 	const [onCreateBooking, setOnCreateBooking] = useState(false)
 	const [messageApi, contextHolder] = message.useMessage()
-	const { guests, isLoading, success, error } = useSelector((state) => state.bookingStore)
 	const [data, setData] = useState()
-	const dispatch = useDispatch()
+	// #endregion
 
+	// #region Redux
+	const { guests, isLoading, success, error } = useSelector((state) => state.bookingStore)
+	// #endregion
+
+	// #region UseEffect
 	useEffect(() => {
 		dispatch(guestsGetAction())
-	}, [])
-	useEffect(() => {
 		loadData()
-		// eslint-disable-next-line
-	}, [onCreateBooking])
+	}, [])
+
+	useEffect(() => {
+		if (error === '' && success === '') return
+		messageApi.open(messageGenerate(success, error))
+		dispatch(resetMessagesAction())
+	}, [error, success])
+	// #endregion
+
+	// #region Функции
 	const loadData = () => {
 		// setCount();
 		let tempData = []
@@ -57,19 +68,11 @@ const FrontdeskPage = () => {
 			setData(tempData)
 		}
 	}
-
-	React.useEffect(() => {
-		if (!isEmpty(success)) {
-			dispatch(resetMessagesAction())
-			messageApi.open({
-				type: 'success',
-				content: success
-			})
-		}
-	}, [error, success])
 	const onCreateBookingClick = () => {
 		setOnCreateBooking(true)
 	}
+	// #endregion
+
 	return (
 		<>
 			{contextHolder}

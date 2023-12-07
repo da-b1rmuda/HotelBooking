@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Input, Button, Descriptions, Tag, Form } from 'antd';
+import { Card, Input, Button, Tag, Form } from 'antd';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 
 const StepSecond = ({ dataBooking, setDataBooking, onChangeStep, selectedRoom, filterRate }) => {

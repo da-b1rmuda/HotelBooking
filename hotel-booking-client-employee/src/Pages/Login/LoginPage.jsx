@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Form, Input, Checkbox, Button, message } from 'antd'
 import { LockOutlined, UserOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { isEmpty } from '../../services/functionService'
+import { messageGenerate } from '../../services/functionService'
 import { useDispatch, useSelector } from 'react-redux'
 import { resetMessagesAction } from '../../store/actions/userAction'
 import './LoginPage.scss'
@@ -10,16 +10,21 @@ import Loading from '../../components/Loading/Loading'
 import { userLoginAction } from '../../store/actions/userAction'
 
 const LoginPage = () => {
+	// #region Вспомогательные переменные
 	const navigation = useNavigate()
 	const dispatch = useDispatch()
-	const { userInfo, isLoading, isAuth, error, success } = useSelector((state) => state.userStore)
-
 	const [rememberUser, setRememberUser] = useState(true)
+	// #endregion
 
-	const onFinish = (values) => {
-		dispatch(userLoginAction(values.login, values.password))
-	}
+	// #region Redux
+	const { userInfo, isLoading, isAuth, error, success } = useSelector((state) => state.userStore)
+	// #endregion
 
+	// #region UseEffect
+
+	// При авторизации записывает данные
+	// о пользователе в localstorage и
+	// перенаправляет на главную страницу.
 	useEffect(() => {
 		if (!isAuth) return
 		if (rememberUser) {
@@ -31,33 +36,23 @@ const LoginPage = () => {
 		}
 		navigation('/overview')
 	}, [isAuth])
+	// #endregion
 
+	// #region Функции
+	// Завершение авторизации
+	const onLoginFinish = (values) => {
+		dispatch(userLoginAction(values.login, values.password))
+	}
+	// #endregion
+
+	// #region Вывод всплывающих сообщений
 	const [messageApi, contextHolder] = message.useMessage()
-
 	useEffect(() => {
-		if (!isEmpty(success)) {
-			dispatch(resetMessagesAction())
-			messageSuccess(success)
-		}
-		if (!isEmpty(error)) {
-			dispatch(resetMessagesAction())
-			messageError(error)
-		}
-		// eslint-disable-next-line
+		if (error === '' && success === '') return
+		// messageApi.open(messageGenerate(success, error))
+		dispatch(resetMessagesAction())
 	}, [error, success])
-
-	const messageError = (e) => {
-		messageApi.open({
-			type: 'error',
-			content: e
-		})
-	}
-	const messageSuccess = (text) => {
-		messageApi.open({
-			type: 'success',
-			content: text
-		})
-	}
+	// #endregion
 
 	return (
 		<>
@@ -75,16 +70,14 @@ const LoginPage = () => {
 								</div>
 							</div>
 							<div className='loginPage__text'>
-								<p className='d-flex'>
-									Добро пожаловать в BHotel!
-								</p>
+								<p className='d-flex'>Добро пожаловать в BookRoom!</p>
 								<p>Пожалуйста авторизуйтесь в ваш аккаунт и начинаете работать</p>
 							</div>
 							<Form
 								size='large'
 								name='normal_login'
 								className='login-form'
-								onFinish={onFinish}
+								onFinish={onLoginFinish}
 								onSubmitCapture={(e) => e.preventDefault()}
 							>
 								<Form.Item

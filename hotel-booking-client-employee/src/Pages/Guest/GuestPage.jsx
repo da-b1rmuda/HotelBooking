@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	SearchOutlined,
 	FilterOutlined,
@@ -8,7 +8,12 @@ import {
 } from '@ant-design/icons'
 import { Button, Input, Radio, Table, Tag, Space, Dropdown, Tooltip, Modal, message } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { BookingDeleteAction, guestsGetAction, resetMessagesAction } from '../../store/actions/bookingAction'
+import {
+	BookingDeleteAction,
+	guestsGetAction,
+	makeGuestCheckOutAction,
+	resetMessagesAction
+} from '../../store/actions/bookingAction'
 import { getConvertedDate, getListFilter } from '../../services/functionService.js'
 import './GuestPage.scss'
 import Loading from '../../components/Loading/Loading.jsx'
@@ -106,14 +111,18 @@ const GuestPage = () => {
 		setSortedInfo({})
 	}
 	const setGuestArrive = () => {
-		console.log(filteredInfo)
 		setFilteredInfo({
-			status: ['Прибыл']
+			status: ['Прибыл', 'Должен прибыть' ]
 		})
 	}
 	const setGuestReserved = () => {
 		setFilteredInfo({
-			status: ['Должен прибыть', 'Должен выехать', 'Выехал']
+			status: ['Выехал']
+		})
+	}
+	const setGuestShouldDeparture = () => {
+		setFilteredInfo({
+			status: ['Должен выехать']
 		})
 	}
 
@@ -123,6 +132,10 @@ const GuestPage = () => {
 		const userData = JSON.parse(localStorage.getItem('userInfo'))
 		if (userData.role === 'admin') {
 			setItems([
+				{
+					label: 'Отметить выезд',
+					key: 'departure'
+				},
 				{
 					label: 'Удалить',
 					key: 'delete'
@@ -213,9 +226,12 @@ const GuestPage = () => {
 			: {}
 	]
 
-	const onClick = ({ key, items }) => {
+	const onClick = ({ key }) => {
 		if (key === 'delete') {
 			showDeleteConfirm()
+		}
+		if (key === 'departure') {
+			showDepartureConfirm()
 		}
 	}
 	// Delete row
@@ -233,6 +249,20 @@ const GuestPage = () => {
 		})
 	}
 
+	// Departure guest
+	const showDepartureConfirm = () => {
+		confirm({
+			title: 'Вы уверены, что хотите отметить выезд гостя?',
+			icon: <ExclamationCircleFilled />,
+			okText: 'Да',
+			okType: 'danger',
+			cancelText: 'Нет',
+			onOk() {
+				dispatch(makeGuestCheckOutAction(selectedRow))
+			}
+		})
+	}
+
 	//
 	// Field is empty check
 	//
@@ -242,8 +272,6 @@ const GuestPage = () => {
 		}
 		return false
 	}
-
-	let ref = useRef(null)
 
 	return (
 		<>
@@ -261,6 +289,9 @@ const GuestPage = () => {
 						</Radio.Button>
 						<Radio.Button value='c' onClick={() => setGuestReserved()}>
 							Выехали
+						</Radio.Button>
+						<Radio.Button value='d' onClick={() => setGuestShouldDeparture()}>
+							Должны выехать
 						</Radio.Button>
 					</Radio.Group>
 				</div>

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import React, { useEffect, useRef, useState } from 'react'
-import { Card, Tag, Input, Table, Button } from 'antd'
+import { Card, Tag, Input, Table } from 'antd'
 import {
 	FilePdfOutlined,
 	AuditOutlined,
@@ -8,10 +8,9 @@ import {
 	FireOutlined,
 	DollarOutlined,
 	UserOutlined,
-	SearchOutlined,
-	ClearOutlined
+	SearchOutlined
 } from '@ant-design/icons'
-import { getFullDate } from '../../services/functionService'
+import { getFullDate, numberWithSpaces, profitThenLastMonth } from '../../services/functionService'
 import './OverviewPage.scss'
 import ReactECharts from 'echarts-for-react'
 import { optionVisitors, optionActivityGuest, optionAvailableRooms } from './optionsCharts'
@@ -22,24 +21,16 @@ import ReactToPrint from 'react-to-print'
 import { columnsGuests, columnsRoom, columnsRate, columnsDeal, columnsUsers } from './optionTables'
 
 const OverviewPage = () => {
-	const [queryData, setQueryData] = useState()
+	// #region Вспомогательные переменные
 	const dispatch = useDispatch()
-
-	const { guests, isLoading: loadGuests } = useSelector((state) => state.bookingStore)
-	const { room, isLoading: loadRoom } = useSelector((state) => state.roomStore)
-	const { deal, isLoading: loadDeal } = useSelector((state) => state.dealStore)
-	const { rate, isLoading: loadRate } = useSelector((state) => state.rateStore)
-	const { users, userInfo, isLoading: loadUsers } = useSelector((state) => state.userStore)
-
 	let refGuests = useRef(null)
 	let refRoom = useRef(null)
 	let refDeal = useRef(null)
 	let refRate = useRef(null)
 	let refUsers = useRef(null)
-
+	const [queryData, setQueryData] = useState()
 	const [data, setData] = useState({
 		userInfo: [],
-
 		guestsData: [],
 		roomData: [],
 		dealData: [],
@@ -50,6 +41,17 @@ const OverviewPage = () => {
 		visitorsInThreeMonths: [],
 		howManyArrivedAndHowManyLeft: []
 	})
+	// #endregion
+
+	// #region Redux
+	const { guests, isLoading: loadGuests } = useSelector((state) => state.bookingStore)
+	const { room, isLoading: loadRoom } = useSelector((state) => state.roomStore)
+	const { deal, isLoading: loadDeal } = useSelector((state) => state.dealStore)
+	const { rate, isLoading: loadRate } = useSelector((state) => state.rateStore)
+	const { users, isLoading: loadUsers } = useSelector((state) => state.userStore)
+	// #endregion
+
+	// #region UseEffect
 	useEffect(() => {
 		const querysOverview = async () => {
 			let RevenuePerMonth = await QuerysService.getRevenuePerMonth()
@@ -57,7 +59,6 @@ const OverviewPage = () => {
 			let VisitorsInThreeMonths = await QuerysService.getVisitorsInThreeMonths()
 			let HowManyArrived = await QuerysService.getHowManyArrived()
 			let HowManyLeft = await QuerysService.getHowManyLeft()
-
 			setData({
 				...data,
 				userInfo: JSON.parse(localStorage.getItem('userInfo')),
@@ -75,18 +76,9 @@ const OverviewPage = () => {
 		}
 		querysOverview()
 	}, [guests, room, deal, rate, users])
+	// #endregion
 
-	function numberWithSpaces(x) {
-		return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-	}
-	function profitThenLastMonth(present, last) {
-		if (present > last) {
-			return '+' + (((present - last) / present) * 100).toFixed(1)
-		} else {
-			return '-' + (((last - present) / last) * 100).toFixed(1)
-		}
-	}
-
+	// #region Функции
 	const querysGet = async (query) => {
 		if (query === 'MostExpensiveBooking') {
 			let data = await QuerysService.getMostExpensiveBooking()
@@ -122,6 +114,7 @@ const OverviewPage = () => {
 			return
 		}
 	}
+	// #endregion
 
 	return (
 		<>
@@ -146,17 +139,31 @@ const OverviewPage = () => {
 								</div>
 								<div className='d-f'>
 									<div>
-										<img src='image/plus.png' alt='img' style={{ width: '20vh' }} />
+										<img
+											src={
+												profitThenLastMonth(data.revenuePerMonth?.current_month, data.revenuePerMonth?.last_month) > 0
+													? 'image/plus.png'
+													: 'image/minus.png'
+											}
+											alt='img'
+											style={{ width: '20vh' }}
+										/>
 									</div>
 									<div
 										className='overview-card__overview__text d-f fd-c jc-c'
 										style={{ paddingLeft: '2vh', width: '18vh' }}
 									>
-										<p style={{ color: '#89D69D' }}>
+										<p
+											className={
+												profitThenLastMonth(data.revenuePerMonth?.current_month, data.revenuePerMonth?.last_month) > 0
+													? 'plusRevenue'
+													: 'negativeRevenue'
+											}
+										>
 											{profitThenLastMonth(data.revenuePerMonth?.current_month, data.revenuePerMonth?.last_month)}%
 										</p>
 										<p>
-											Чем в прошлом <br /> месяце
+											Месячный темп <br /> роста
 										</p>
 									</div>
 								</div>
@@ -188,10 +195,10 @@ const OverviewPage = () => {
 							<div className='overview-card__room'>
 								<p style={{ marginBottom: '3vh' }}>Статистика комнат</p>
 								<div className='d-f jc-sb status-room__text'>
-									<div style={{ width: '45%' }}>
+									<div style={{ width: '45%' }}> 
 										<div className='d-f fd-c status-room__list'>
 											<div>
-												<p>Свободные комнаты ㅤㅤㅤㅤㅤ</p>
+												<p>Свободные комнаты</p>
 												<Tag>
 													<p>{data.roomInformation?.available_room}</p>
 												</Tag>

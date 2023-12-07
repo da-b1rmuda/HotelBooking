@@ -13,7 +13,8 @@ import {
 	MenuUnfoldOutlined,
 	MenuFoldOutlined,
 	UserOutlined,
-	LogoutOutlined
+	LogoutOutlined,
+	TeamOutlined
 } from '@ant-design/icons'
 import { Layout, Menu, theme, Button, message, Avatar, Dropdown, Divider } from 'antd'
 import { ContextBooking } from '../context/booking.context'
@@ -31,7 +32,7 @@ import Loading from '../components/Loading/Loading'
 import { LoadingAction, logoutAction, resetMessagesAction, userGetAction } from '../store/actions/userAction'
 import { isEmpty, firstLetterNameUser } from '../services/functionService'
 import { userLogout } from '../store/reducers/userReducer'
-import { guestsGetAction } from '../store/actions/bookingAction'
+import { checkAndChangeStatusGuestAction, guestsGetAction } from '../store/actions/bookingAction'
 import { roomGetAction } from '../store/actions/roomAction'
 import { dealGetAction } from '../store/actions/dealAction'
 import { rateGetAction } from '../store/actions/rateAction'
@@ -44,15 +45,25 @@ export default function LayoutApp({ children }) {
 		token: { colorBgContainer }
 	} = theme.useToken()
 
-	const { isAuth, isLoading, success, userInfo } = useSelector((state) => state.userStore)
+	const { isAuth, success } = useSelector((state) => state.userStore)
+	const { guests } = useSelector((state) => state.bookingStore)
 	const dispatch = useDispatch()
 	const [user, setUser] = useState({})
 
 	useEffect(() => {
 		dispatch(userGetAction())
+		dispatch(guestsGetAction())
 		setUser(JSON.parse(localStorage.getItem('userInfo')))
 		dispatch(LoadingAction(true))
 	}, [])
+
+	useEffect(() => {
+		console.log(guests)
+		if (guests.length) {
+			console.log(guests)
+			dispatch(checkAndChangeStatusGuestAction(guests))
+		}
+	}, [guests])
 
 	const [load, setLoad] = useState(false)
 
@@ -121,9 +132,18 @@ export default function LayoutApp({ children }) {
 		getItem('Гости', 'guest', <AuditOutlined />),
 		getItem('Комнаты', 'room', <AppstoreOutlined />),
 		getItem('Акции', 'deal', <FireOutlined />),
-		getItem('Расценки', 'rate', <DollarOutlined />)
+		getItem('Расценки', 'rate', <DollarOutlined />),
+		getItem('Сотрудники', 'employee', <TeamOutlined />, [
+			getItem('Все', 'allEmployee'),
+			getItem('График', 'sсheduleEmployee'),
+			getItem('Задачи', 'taskEmployee')
+		])
 		// getItem('Дополнительно', 'advanced', <ControlOutlined />),
 	]
+
+	//все работники <TeamOutlined />
+	//расписание работников ContactsOutlined
+	//раздача задач <InsertRowAboveOutlined />
 
 	//
 	// Menu item click
@@ -168,7 +188,7 @@ export default function LayoutApp({ children }) {
 				<div className='d-flex align-items-center justify-content-center'>
 					<img src='/image/logo.svg' alt='logo' style={{ width: '5vh' }} />
 					<div className='loginPage__logo' style={collapsed ? { display: 'none' } : { display: 'block' }}>
-						<p style={{ fontSize: '3vh' }}>BookRoom</p>
+						<p style={{ fontSize: '3vh', alignItems: 'center', paddingTop: '2.2vh' }}>BookRoom</p>
 					</div>
 				</div>
 				<Menu
